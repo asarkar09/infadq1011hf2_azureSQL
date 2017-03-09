@@ -243,9 +243,9 @@
       "type": "string",
       "metadata": {
         "description": "Base URL for Marketplace",
-        "artifactsBaseUrl": "https://raw.githubusercontent.com/anandamit/infadq10.1.1/master/AzureSolution"
+        "artifactsBaseUrl": "https://raw.githubusercontent.com/anandamit/infadq1011/master/DQ"
       },
-      "defaultValue": "https://raw.githubusercontent.com/anandamit/infadq10.1.1/master/AzureSolution"
+      "defaultValue": "https://raw.githubusercontent.com/anandamit/infadq1011/master/DQ"
     },
     "infamrsdbusername": {
       "type": "string",
