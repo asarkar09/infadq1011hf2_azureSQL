@@ -6,23 +6,21 @@ Param(
   [string]$domainPassword,
   [string]$nodeName,
   [int]$nodePort,
+
   [string]$dbType,
   [string]$dbName,
   [string]$dbUser,
   [string]$dbPassword,
-	[string]$dbmrsUser,
-	[string]$dbmrsPassword,
-	[string]$dbrefdataUser,
-	[string]$dbrefdataPassword,
-	[string]$dbprofileUser,
-	[string]$dbprofilePassword,
   [string]$dbHost,
   [int]$dbPort,
+
   [string]$sitekeyKeyword,
+
   [string]$joinDomain = 0,
   [string]$masterNodeHost,
   [string]$osUserName,
   [string]$infaEdition,
+
   [string]$storageName,
   [string]$storageKey,
   [string]$infaLicense
