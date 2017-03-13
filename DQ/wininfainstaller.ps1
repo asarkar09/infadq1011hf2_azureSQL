@@ -23,6 +23,12 @@ Param(
 
   [string]$storageName,
   [string]$storageKey,
+  [string]$dbmrsuser,
+  [string]$dbmrspwd,
+  [string]$dbrefdatauser,
+  [string]$dbrefdatapwd,
+  [string]$dbprofileuser,
+  [string]$dbprofilepwd,
   [string]$infaLicense
 )
 
@@ -147,7 +153,7 @@ echo Editing Informatica silent installation file
 `
 -replace '^MRS_DB_UNAME=.*$',"MRS_DB_UNAME=$dbmrsUser" `
 `
--replace '^MRS_DB_PASSWD=.*$',"MRS_DB_PASSWD=$dbmrsPassword" `
+-replace '^MRS_DB_PASSWD=.*$',"MRS_DB_PASSWD=$dbmrspwd" `
 `
 -replace '^MRS_DB_SERVICENAME=.*$',"MRS_DB_SERVICENAME=$dbName" `
 `
@@ -184,7 +190,7 @@ if($infaLicenseFile -ne "") {
 function createDQServices() {
 
     ac  C:\DQServiceLog.log "Create STAGE connection"
-    ($out = C:\Informatica\10.1.1\isp\bin\infacmd createConnection -dn $domainName -un $domainUser -pd $domainPassword -cn $stageconnname -cid $stageconnname -ct SQLSERVER -cun $dbrefdataUser -cpd $dbrefdataPassword -o CodePage='UTF-8' DataAccessConnectString=''$dbName'' MetadataAccessConnectString='"'$metadataaccessstring''"" ) | Out-Null
+    ($out = C:\Informatica\10.1.1\isp\bin\infacmd createConnection -dn $domainName -un $domainUser -pd $domainPassword -cn $stageconnname -cid $stageconnname -ct SQLSERVER -cun $dbrefdatauser -cpd $dbrefdatapwd -o CodePage='UTF-8' DataAccessConnectString=''$dbName'' MetadataAccessConnectString='"'$metadataaccessstring''"" ) | Out-Null
     ac C:\InfaServiceLog.log $out
 
     ac  C:\DQServiceLog.log "Create CMS"
