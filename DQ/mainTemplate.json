@@ -499,83 +499,101 @@
                     "uri": "[variables('nodeVMUri')]",
                     "contentVersion": "1.0.0.0"
                 },
-                "parameters": {
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "storageName": {
-                        "value": "[parameters('storageName')]"
-                    },
-                    "storageID": {
-                        "value": "[variables('storageID')]"
-                    },
-                    "vnetName": {
-                        "value": "[parameters('vnetName')]"
-                    },
-                    "subnetName": {
-                        "value": "[parameters('subnetName')]"
-                    },
-                    "subnetId": {
-                        "value": "[variables('subnetID')]"
-                    },
-                    "nsgName": {
-                        "value": "[variables('nsgName')]"
-                    },
-                    "dbVMName": {
-                        "value": "[parameters('dbVMName')]"
-                    },
-                    "dbUser": {
-                        "value": "[parameters('dbUser')]"
-                    },
-                    "dbPassword": {
-                        "value": "[parameters('dbPassword')]"
-                    },
-                    "nodeVMSize": {
-                        "value": "[parameters('nodeVMSize')]"
-                    },
-                    "nodeVMOSType": {
-                        "value": "[parameters('nodeVMOS')]"
-                    },
-                    "nodeVMAdminUsername": {
-                        "value": "[parameters('nodeVMAdminUsername')]"
-                    },
-                    "nodeVMAdminPassword": {
-                        "value": "[parameters('nodeVMAdminPassword')]"
-                    },
-                    "nodeVMAdminSshPublicKey": {
-                        "value": "[parameters('nodeVMAdminSshPublicKey')]"
-                    },
-                    "nodeVMNamePrefix": {
-                        "value": "[parameters('nodeVMNamePrefix')]"
-                    },
-                    "nodeVMCount": {
-                        "value": "[variables('nodeVMCountInt')]"
-                    },
-                    "infaDomainName": {
-                        "value": "[parameters('infaDomainName')]"
-                    },
-                    "infaDomainUser": {
-                        "value": "[parameters('infaDomainUser')]"
-                    },
-                    "infaDomainPassword": {
-                        "value": "[parameters('infaDomainPassword')]"
-                    },
-                    "infaNodeNamePrefix": {
-                        "value": "[variables('infaNodeNamePrefix')]"
-                    },
-                    "infaKeyword": {
-                        "value": "[parameters('infaKeyword')]"
-                    },
-                    "infaDomainLicense": {
-                        "value": "[parameters('infaDomainLicense')]"
-                    },
-                    "baseUrl": {
-                        "value": "[variables('baseUri')]"
-                    },
-                    "informaticaTags": { 
-                        "value": "[parameters('informaticaTags')]"
-                    }
+              "parameters": {
+                "location": {
+                  "value": "[parameters('location')]"
+                },
+                "storageName": {
+                  "value": "[parameters('storageName')]"
+                },
+                "storageID": {
+                  "value": "[variables('storageID')]"
+                },
+                "vnetName": {
+                  "value": "[parameters('vnetName')]"
+                },
+                "subnetName": {
+                  "value": "[parameters('subnetName')]"
+                },
+                "subnetId": {
+                  "value": "[variables('subnetID')]"
+                },
+                "nsgName": {
+                  "value": "[variables('nsgName')]"
+                },
+                "dbVMName": {
+                  "value": "[parameters('dbVMName')]"
+                },
+                "dbUser": {
+                  "value": "[parameters('dbUser')]"
+                },
+                "dbPassword": {
+                  "value": "[parameters('dbPassword')]"
+                },
+                "nodeVMSize": {
+                  "value": "[parameters('nodeVMSize')]"
+                },
+                "nodeVMOSType": {
+                  "value": "[parameters('nodeVMOS')]"
+                },
+                "nodeVMAdminUsername": {
+                  "value": "[parameters('nodeVMAdminUsername')]"
+                },
+                "nodeVMAdminPassword": {
+                  "value": "[parameters('nodeVMAdminPassword')]"
+                },
+                "nodeVMAdminSshPublicKey": {
+                  "value": "[parameters('nodeVMAdminSshPublicKey')]"
+                },
+                "nodeVMNamePrefix": {
+                  "value": "[parameters('nodeVMNamePrefix')]"
+                },
+                "nodeVMCount": {
+                  "value": "[variables('nodeVMCountInt')]"
+                },
+                "infaDomainName": {
+                  "value": "[parameters('infaDomainName')]"
+                },
+                "infaDomainUser": {
+                  "value": "[parameters('infaDomainUser')]"
+                },
+                "infaDomainPassword": {
+                  "value": "[parameters('infaDomainPassword')]"
+                },
+                "infaNodeNamePrefix": {
+                  "value": "[variables('infaNodeNamePrefix')]"
+                },
+                "infaKeyword": {
+                  "value": "[parameters('infaKeyword')]"
+                },
+                "infaDomainLicense": {
+                  "value": "[parameters('infaDomainLicense')]"
+                },
+                "baseUrl": {
+                  "value": "[variables('baseUri')]"
+                },
+                "infamrsdbusername": {
+                  "value": "[parameters('infamrsdbusername')]"
+                },
+                "infamrsdbpassword": {
+                  "value": "[parameters('infamrsdbpassword')]"
+                },
+                "infarefdatadbusername": {
+                  "value": "[parameters('infarefdatadbusername')]"
+                },
+                "infarefdatadbpassword": {
+                  "value": "[parameters('infarefdatadbpassword')]"
+                },
+                "infaprofiledbusername": {
+                  "value": "[parameters('infaprofiledbusername')]"
+                },
+                "infaprofiledbpassword": {
+                  "value": "[parameters('infaprofiledbpassword')]"
+                },
+                "informaticaTags": {
+                  "value": "[parameters('informaticaTags')]"
                 }
+              }
             }
         }
     ],
