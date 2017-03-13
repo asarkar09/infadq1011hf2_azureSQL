@@ -6,38 +6,33 @@ Param(
   [string]$domainPassword,
   [string]$nodeName,
   [int]$nodePort,
-
   [string]$dbType,
   [string]$dbName,
   [string]$dbUser,
   [string]$dbPassword,
+	[string]$dbmrsUser,
+	[string]$dbmrsPassword,
+	[string]$dbrefdataUser,
+	[string]$dbrefdataPassword,
+	[string]$dbprofileUser,
+	[string]$dbprofilePassword,
   [string]$dbHost,
   [int]$dbPort,
-
   [string]$sitekeyKeyword,
-
   [string]$joinDomain = 0,
   [string]$masterNodeHost,
   [string]$osUserName,
   [string]$infaEdition,
-
   [string]$storageName,
   [string]$storageKey,
-  [string]$infaLicense,
-
-  [string]$dbmrsUser,
-  [string]$dbmrsPassword,
-  [string]$dbrefdataUser,
-  [string]$dbrefdataPassword,
-  [string]$dbprofileUser,
-  [string]$dbprofilePassword
+  [string]$infaLicense
 )
 
 #echo $domainHost $domainName $domainUser $domainPassword $nodeName $nodePort $dbType $dbName $dbUser $dbPassword $dbHost $dbPort $sitekeyKeyword $joinDomain $masterNodeHost $osUserName $infaEdition $storageName $storageKey $infaLicense
 
 #Adding Windows firewall inbound rule
 echo Adding firewall rules for Informatica domain service ports
-netsh  advfirewall firewall add rule name="Informatica_PowerCenter" dir=in action=allow profile=any localport=6005-6113 protocol=TCP
+netsh  advfirewall firewall add rule name="Informatica_DataQuality" dir=in action=allow profile=any localport=6005-6113 protocol=TCP
 
 $shareName = "infaaeshare"
 
@@ -150,7 +145,7 @@ echo Editing Informatica silent installation file
 `
 -replace '^CREATE_SERVICES=.*$',"CREATE_SERVICES=1" `
 `
--replace '^MRS_DB_TYPE=.*$',"MRS_DB_TYPE=$dbTYPE" `
+-replace '^MRS_DB_TYPE=.*$',"MRS_DB_TYPE=MSSQLServer" `
 `
 -replace '^MRS_DB_UNAME=.*$',"MRS_DB_UNAME=$dbmrsUser" `
 `
@@ -191,7 +186,7 @@ if($infaLicenseFile -ne "") {
 function createDQServices() {
 
     ac  C:\DQServiceLog.log "Create STAGE connection"
-    ($out = C:\Informatica\10.1.1\isp\bin\infacmd createConnection -dn $domainName -un $domainUser -pd $domainPassword -cn $stageconnname -cid $stageconnname -ct $dbTYPE -cun $dbrefdataUser -cpd $dbrefdataPassword -o CodePage='UTF-8' DataAccessConnectString=''$dbName'' MetadataAccessConnectString='"'$metadataaccessstring''"" ) | Out-Null
+    ($out = C:\Informatica\10.1.1\isp\bin\infacmd createConnection -dn $domainName -un $domainUser -pd $domainPassword -cn $stageconnname -cid $stageconnname -ct SQLSERVER -cun $dbrefdataUser -cpd $dbrefdataPassword -o CodePage='UTF-8' DataAccessConnectString=''$dbName'' MetadataAccessConnectString='"'$metadataaccessstring''"" ) | Out-Null
     ac C:\InfaServiceLog.log $out
 
     ac  C:\DQServiceLog.log "Create CMS"
