@@ -139,9 +139,9 @@ echo Editing Informatica silent installation file
 `
 -replace '^MRS_DB_TYPE=.*$',"MRS_DB_TYPE=MSSQLServer" `
 `
--replace '^MRS_DB_UNAME=.*$',"MRS_DB_UNAME=$dbmrsuser" `
+-replace '^MRS_DB_UNAME=.*$',"MRS_DB_UNAME=$mrsdbuser" `
 `
--replace '^MRS_DB_PASSWD=.*$',"MRS_DB_PASSWD=$dbmrspwd" `
+-replace '^MRS_DB_PASSWD=.*$',"MRS_DB_PASSWD=$mrsdbpwd" `
 `
 -replace '^MRS_DB_SERVICENAME=.*$',"MRS_DB_SERVICENAME=$dbName" `
 `
