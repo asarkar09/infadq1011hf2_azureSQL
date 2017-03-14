@@ -30,7 +30,7 @@ Param(
 
 #Adding Windows firewall inbound rule
 echo Adding firewall rules for Informatica domain service ports
-netsh  advfirewall firewall add rule name="Informatica_DataQuality" dir=in action=allow profile=any localport=6005-6113 protocol=TCP
+netsh  advfirewall firewall add rule name="Informatica_PowerCenter" dir=in action=allow profile=any localport=6005-6113 protocol=TCP
 
 $shareName = "infaaeshare"
 
@@ -84,14 +84,6 @@ $cmd | Set-Content "$env:SystemDrive\ProgramData\Microsoft\Windows\Start Menu\Pr
 
 runas /user:$osUserName net use I: \\$storageName.file.core.windows.net\$shareName /u:$storageName $storageKey
 
-# Services
-$mrsservicename="ModelRepositoryService"
-$stageconnname="STAGE"
-$metadataaccessstring="'jdbc:informatica:sqlserver://"+$dbAddress+";Servicename="+$dbName+"'"
-$disservicename="DataIntegrationService"
-$cmsservicename="ContentManagementService"
-$atservicename="AnalystService"
-
 echo Editing Informatica silent installation file
 (gc $propertyFile | %{$_ -replace '^LICENSE_KEY_LOC=.*$',"LICENSE_KEY_LOC=$infaLicenseFile"  `
 `
@@ -139,27 +131,7 @@ echo Editing Informatica silent installation file
 `
 -replace '^DOMAIN_CNFRM_PSSWD=.*$',"DOMAIN_CNFRM_PSSWD=$domainPassword" `
 `
--replace '^DB_PASSWD=.*$',"DB_PASSWD=$dbPassword" `
-`
--replace '^CREATE_SERVICES=.*$',"CREATE_SERVICES=1" `
-`
--replace '^MRS_DB_TYPE=.*$',"MRS_DB_TYPE=MSSQLServer" `
-`
--replace '^MRS_DB_UNAME=.*$',"MRS_DB_UNAME=$dbmrsUser" `
-`
--replace '^MRS_DB_PASSWD=.*$',"MRS_DB_PASSWD=$dbmrspwd" `
-`
--replace '^MRS_DB_SERVICENAME=.*$',"MRS_DB_SERVICENAME=$dbName" `
-`
--replace '^MRS_DB_ADDRESS=.*$',"MRS_DB_ADDRESS=$dbAddress" `
-`
--replace '^MRS_SERVICE_NAME=.*$',"MRS_SERVICE_NAME=$mrsservicename" `
-`
--replace '^DIS_SERVICE_NAME=.*$',"DIS_SERVICE_NAME=$disservicename" `
-`
--replace '^DIS_PROTOCOL_TYPE=.*$',"DIS_PROTOCOL_TYPE=http" `
-`
--replace '^DIS_HTTP_PORT=.*$',"DIS_HTTP_PORT=8095"
+-replace '^DB_PASSWD=.*$',"DB_PASSWD=$dbPassword" 
 
 }) | sc $propertyFile
 
@@ -180,23 +152,5 @@ Rename-Item $installerHome/source_temp $installerHome/source
 if($infaLicenseFile -ne "") {
 	rm $infaLicenseFile
 }
-
-function createDQServices() {
-
-    ac  C:\DQServiceLog.log "Create STAGE connection"
-    ($out = C:\Informatica\10.1.1\isp\bin\infacmd createConnection -dn $domainName -un $domainUser -pd $domainPassword -cn $stageconnname -cid $stageconnname -ct SQLSERVER -cun $dbrefdatauser -cpd $dbrefdatapwd -o CodePage='UTF-8' DataAccessConnectString=''$dbName'' MetadataAccessConnectString='"'$metadataaccessstring''"" ) | Out-Null
-    ac C:\InfaServiceLog.log $out
-
-    ac  C:\DQServiceLog.log "Create CMS"
-    ($out = C:\Informatica\10.1.1\isp\bin\infacmd cms createService -dn $domainName -nn $nodeName -un $domainUser -pd $domainPassword -sn $cmsservicename -ds $disservicename -rs $mrsservicename -rsu $domainUser -rsp $domainPassword -rdl STAGE -HttpPort 8105 ) | Out-Null
-	ac C:\InfaServiceLog.log $out
-
-    ac  C:\DQServiceLog.log "Create Analyst Service"
-    ($out = C:\Informatica\10.1.1\isp\bin\infacmd as createService -dn $domainName -nn $nodeName -un $domainUser -pd $domainpass -sn $atservicename -ds $disservicename -rs $mrsservicename -au $domainUser -ap $domainPassword -HttpPort 8085 ) | Out-Null
-    ac C:\InfaServiceLog.log $out
-
-}
-
-createDQServices
 
 echo Informatica setup Complete.
