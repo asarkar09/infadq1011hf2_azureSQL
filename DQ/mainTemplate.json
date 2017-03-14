@@ -247,34 +247,35 @@
       },
       "defaultValue": "https://raw.githubusercontent.com/anandamit/infadq1011/master/DQ"
     },
-    "infamrsdbusername": {
+    "mrsdbuser": {
       "type": "string",
       "defaultValue": "mrsdb",
       "metadata": {
         "description": "Database user for Model repository service"
       }
     },
-    "infamrsdbpassword": {
+    "mrsdbpwd": {
       "type": "securestring"
     },
-    "infarefdatadbusername": {
+    "refdatadbuser": {
       "type": "string",
       "defaultValue": "cmsdb",
       "metadata": {
         "description": "Database user for Reference Data DB"
       }
     },
-    "infarefdatadbpassword": {
+    "refdatadbpwd": {
       "type": "securestring"
     },
-    "infaprofiledbusername": {
+    "profiledbuser": {
       "type": "string",
       "defaultValue": "profiledb",
       "metadata": {
         "description": "Database user for Profile DB"
       }
+
     },
-    "infaprofiledbpassword": {
+    "profiledbpwd": {
       "type": "securestring"
     },
     "informaticaTags": {
@@ -463,22 +464,22 @@
                   "value": "[variables('baseUri')]"
                 },
                 "mrsdbuser": {
-                  "value": "[parameters('infamrsdbusername')]"
+                  "value": "[parameters('mrsdbuser')]"
                 },
                 "mrsdbpwd": {
-                  "value": "[parameters('infamrsdbpassword')]"
+                  "value": "[parameters('mrsdbpwd')]"
                 },
                 "refdatadbuser": {
-                  "value": "[parameters('infarefdatadbusername')]"
+                  "value": "[parameters('refdatadbuser')]"
                 },
                 "refdatadbpwd": {
-                  "value": "[parameters('infarefdatadbpassword')]"
+                  "value": "[parameters('refdatadbpwd')]"
                 },
                 "profiledbuser": {
-                  "value": "[parameters('infaprofiledbusername')]"
+                  "value": "[parameters('profiledbuser')]"
                 },
                 "profiledbpwd": {
-                  "value": "[parameters('infaprofiledbpassword')]"
+                  "value": "[parameters('profiledbpwd')]"
                 },
                 "informaticaTags": {
                   "value": "[parameters('informaticaTags')]"
@@ -572,23 +573,23 @@
                 "baseUrl": {
                   "value": "[variables('baseUri')]"
                 },
-                "infamrsdbusername": {
-                  "value": "[parameters('infamrsdbusername')]"
+                "mrsdbuser": {
+                  "value": "[parameters('mrsdbuser')]"
                 },
-                "infamrsdbpassword": {
-                  "value": "[parameters('infamrsdbpassword')]"
+                "mrsdbpwd": {
+                  "value": "[parameters('mrsdbpwd')]"
                 },
-                "infarefdatadbusername": {
-                  "value": "[parameters('infarefdatadbusername')]"
+                "refdatadbuser": {
+                  "value": "[parameters('refdatadbuser')]"
                 },
-                "infarefdatadbpassword": {
-                  "value": "[parameters('infarefdatadbpassword')]"
+                "refdatadbpwd": {
+                  "value": "[parameters('refdatadbpwd')]"
                 },
-                "infaprofiledbusername": {
-                  "value": "[parameters('infaprofiledbusername')]"
+                "profiledbuser": {
+                  "value": "[parameters('profiledbuser')]"
                 },
-                "infaprofiledbpassword": {
-                  "value": "[parameters('infaprofiledbpassword')]"
+                "profiledbpwd": {
+                  "value": "[parameters('profiledbpwd')]"
                 },
                 "informaticaTags": {
                   "value": "[parameters('informaticaTags')]"
