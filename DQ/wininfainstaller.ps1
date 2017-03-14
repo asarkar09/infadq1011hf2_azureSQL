@@ -23,12 +23,6 @@ Param(
 
   [string]$storageName,
   [string]$storageKey,
-  [string]$dbmrsuser,
-  [string]$dbmrspwd,
-  [string]$dbrefdatauser,
-  [string]$dbrefdatapwd,
-  [string]$dbprofileuser,
-  [string]$dbprofilepwd,
   [string]$infaLicense
 )
 
