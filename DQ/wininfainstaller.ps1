@@ -23,7 +23,9 @@ Param(
 
   [string]$storageName,
   [string]$storageKey,
-  [string]$infaLicense
+  [string]$infaLicense,
+  [string]$mrsdbuser,
+  [string]$mrsdbpwd
 )
 
 #echo $domainHost $domainName $domainUser $domainPassword $nodeName $nodePort $dbType $dbName $dbUser $dbPassword $dbHost $dbPort $sitekeyKeyword $joinDomain $masterNodeHost $osUserName $infaEdition $storageName $storageKey $infaLicense
@@ -131,7 +133,27 @@ echo Editing Informatica silent installation file
 `
 -replace '^DOMAIN_CNFRM_PSSWD=.*$',"DOMAIN_CNFRM_PSSWD=$domainPassword" `
 `
--replace '^DB_PASSWD=.*$',"DB_PASSWD=$dbPassword" 
+-replace '^DB_PASSWD=.*$',"DB_PASSWD=$dbPassword" `
+`
+-replace '^CREATE_SERVICES=.*$',"CREATE_SERVICES=0" `
+`
+-replace '^MRS_DB_TYPE=.*$',"MRS_DB_TYPE=MSSQLServer" `
+`
+-replace '^MRS_DB_UNAME=.*$',"MRS_DB_UNAME=$dbmrsuser" `
+`
+-replace '^MRS_DB_PASSWD=.*$',"MRS_DB_PASSWD=$dbmrspwd" `
+`
+-replace '^MRS_DB_SERVICENAME=.*$',"MRS_DB_SERVICENAME=$dbName" `
+`
+-replace '^MRS_DB_ADDRESS=.*$',"MRS_DB_ADDRESS=$dbAddress" `
+`
+-replace '^MRS_SERVICE_NAME=.*$',"MRS_SERVICE_NAME=ModelRepositoryService" `
+`
+-replace '^DIS_SERVICE_NAME=.*$',"DIS_SERVICE_NAME=DataIntegrationService" `
+`
+-replace '^DIS_PROTOCOL_TYPE=.*$',"DIS_PROTOCOL_TYPE=http" `
+`
+-replace '^DIS_HTTP_PORT=.*$',"DIS_HTTP_PORT=8095"
 
 }) | sc $propertyFile
 
