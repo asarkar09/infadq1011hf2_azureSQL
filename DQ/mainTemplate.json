@@ -233,7 +233,7 @@
       }
     },
     "infaDomainLicense": {
-      "type": "securestring",
+      "type": "string",
       "defaultValue": "nolicense",
       "metadata": {
         "description": "Informatica domain license key file url"

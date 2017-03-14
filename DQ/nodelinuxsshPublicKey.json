@@ -75,8 +75,8 @@
             "type": "securestring",
             "minLength": 4
         },
-        "infaDomainLicense": { 
-            "type": "securestring"
+        "infaDomainLicense": {
+          "type": "string"
         },
         "baseUrl": {
             "type": "string"
