@@ -145,7 +145,7 @@ echo Editing Informatica silent installation file
 `
 -replace '^DB_PASSWD=.*$',"DB_PASSWD=$dbPassword" `
 `
--replace '^CREATE_SERVICES=.*$',"CREATE_SERVICES=0" `
+-replace '^CREATE_SERVICES=.*$',"CREATE_SERVICES=1" `
 `
 -replace '^MRS_DB_TYPE=.*$',"MRS_DB_TYPE=MSSQLServer" `
 `
@@ -202,5 +202,7 @@ function createDQServices() {
     ($out = C:\Informatica\10.1.1\isp\bin\infacmd as createService -dn $domainName -nn $nodeName -un $domainUser -pd $domainpass -sn AnalystService -ds DataIntegrationService -rs ModelRepositoryService -au $domainUser -ap $domainPassword -HttpPort 8085 ) | Out-Null
     ac C:\InfaServiceLog.log $out
 }
+
+createDQServices
 
 echo Informatica setup Complete.
