@@ -92,7 +92,7 @@ $cmd | Set-Content "$env:SystemDrive\ProgramData\Microsoft\Windows\Start Menu\Pr
 
 runas /user:$osUserName net use I: \\$storageName.file.core.windows.net\$shareName /u:$storageName $storageKey
 
-#Services
+#Services Strings
 $dataaccessstring=$dbHost+"@"+$dbName
 $metadataaccessstring="'jdbc:informatica:sqlserver://"+$dbAddress+";SelectMethod=cursor;databaseName="+$dbName+"'"
 $mrsdbcustomstring="jdbc:informatica:sqlserver://"+$dbAddress+";DatabaseName="+$dbName+";SnapshotSerializable=true"
@@ -162,37 +162,78 @@ Start-Process $installCmd -Verb runAs -workingdirectory $installerHome -wait | O
 rmdir $installerHome/source
 Rename-Item $installerHome/source_temp $installerHome/source
 
-if($infaLicenseFile -ne "") {
-	rm $infaLicenseFile
-}
-
 function createDQServices() {
 
 	ac  C:\DQServiceLog.log "Creating STAGE connection"
     ($out = C:\Informatica\10.1.1\isp\bin\infacmd createConnection -dn $domainName -un $domainUser -pd $domainPassword -cn STAGE -cid STAGE -ct SQLSERVER -cun $refdatadbuser -cpd $refdatadbpwd -o CodePage='UTF-8' DataAccessConnectString=''$dataaccessstring'' MetadataAccessConnectString='"'$metadataaccessstring''"" ) | Out-Null
-	ac C:\InfaServiceLog.log $out
+	ac C:\DQServiceLog.log $out
 
 	ac  C:\DQServiceLog.log "Creating PROFILE connection"
     ($out = C:\Informatica\10.1.1\isp\bin\infacmd createConnection -dn $domainName -un $domainUser -pd $domainPassword -cn PROFILE -cid PROFILE -ct SQLSERVER -cun $profiledbuser -cpd $profiledbpwd -o CodePage='UTF-8' DataAccessConnectString=''$dataaccessstring'' MetadataAccessConnectString='"'$metadataaccessstring''"" ) | Out-Null
-	ac C:\InfaServiceLog.log $out
+	ac C:\DQServiceLog.log $out
 
-    ac  C:\InfaServiceLog.log "Creating Model Repository Service"
+    ac  C:\DQServiceLog.log "Creating Model Repository Service"
     ($out = C:\Informatica\10.1.1\isp\bin\infacmd mrs createService -dn $domainName -nn $nodeName -un $domainUser -pd $domainPassword -sn ModelRepositoryService -du $mrsdbuser -dp $mrsdbpwd -dl $mrsdbcustomstring -dt SQLSERVER ) | Out-Null
-    ac C:\InfaServiceLog.log $out
+    ac C:\DQServiceLog.log $out
 
-    ac  C:\InfaServiceLog.log "Creating Data Integration Service"
+    ac  C:\DQServiceLog.log "Creating Data Integration Service"
     ($out = C:\Informatica\10.1.1\isp\bin\infacmd dis createService -dn $domainName -nn $nodeName -un $domainUser -pd $domainPassword -sn DataIntegrationService -rs ModelRepositoryService -rsun $domainUser -rspd $domainPassword -HttpPort 8095 ) | Out-Null
-    ac C:\InfaServiceLog.log $out
+    ac C:\DQServiceLog.log $out
 
     ac  C:\DQServiceLog.log "Creating Content Management Service"
     ($out = C:\Informatica\10.1.1\isp\bin\infacmd cms createService -dn $domainName -nn $nodeName -un $domainUser -pd $domainPassword -sn ContentManagementService -ds DataIntegrationService -rs ModelRepositoryService -rsu $domainUser -rsp $domainPassword -rdl STAGE -HttpPort 8105 ) | Out-Null
-	ac C:\InfaServiceLog.log $out
+	ac C:\DQServiceLog.log $out
 
     ac  C:\DQServiceLog.log "Creating Analyst Service"
-    ($out = C:\Informatica\10.1.1\isp\bin\infacmd as createService -dn $domainName -nn $nodeName -un $domainUser -pd $domainpass -sn AnalystService -ds DataIntegrationService -rs ModelRepositoryService -au $domainUser -ap $domainPassword -HttpPort 8085 ) | Out-Null
-    ac C:\InfaServiceLog.log $out
+    ($out = C:\Informatica\10.1.1\isp\bin\infacmd as createService -dn $domainName -nn $nodeName -un $domainUser -pd $domainPassword -sn AnalystService -ds DataIntegrationService -rs ModelRepositoryService -au $domainUser -ap $domainPassword -HttpPort 8085 ) | Out-Null
+    ac C:\DQServiceLog.log $out
 }
 
 createDQServices
+
+if($infaLicenseFile -ne "") {
+
+    ac  C:\DQServiceLog.log "Creating License"
+	($out = C:\Informatica\10.1.1\isp\bin\infacmd addlicense -dn $domainName -un $domainUser -pd $domainPassword -ln License -lf $infaLicenseFile ) | Out-Null 
+    ac C:\DQServiceLog.log $out
+
+    ac  C:\DQServiceLog.log "Assigning License"
+    ($out = C:\Informatica\10.1.1\isp\bin\infacmd assignLicense -dn $domainName -un $domainUser -pd $domainPassword -ln License -sn ModelRepositoryService DataIntegrationService ContentManagementService AnalystService ) | Out-Null 
+    ac C:\DQServiceLog.log $out
+        
+    ac  C:\DQServiceLog.log "Enabling MRS"
+    ($out = C:\Informatica\10.1.1\isp\bin\infacmd enableService -dn $domainName -un $domainUser -pd $domainPassword -sn ModelRepositoryService ) | Out-Null 
+    ac C:\DQServiceLog.log $out
+
+	ac  C:\DQServiceLog.log "Creating contents of MRS"
+	($out = C:\Informatica\10.1.1\isp\bin\infacmd mrs createContents -dn $domainName -un $domainUser -pd $domainPassword -sn ModelRepositoryService ) | Out-Null 
+	ac C:\DQServiceLog.log $out
+
+    ac  C:\DQServiceLog.log "Assiging Profile connection to DIS"
+	($out = C:\Informatica\10.1.1\isp\bin\infacmd dis updateServiceoptions -dn $domainName -un $domainUser -pd $domainPassword -sn DataIntegrationService -o "ProfilingServiceOptions.ProfileWarehouseConnectionName=PROFILE" ) | Out-Null
+	ac C:\DQServiceLog.log $out
+	    
+    ac  C:\DQServiceLog.log "Enabling DIS"
+    ($out = C:\Informatica\10.1.1\isp\bin\infacmd enableService -dn $domainName -un $domainUser -pd $domainPassword -sn DataIntegrationService ) | Out-Null 
+    ac C:\DQServiceLog.log $out
+
+    ac  C:\DQServiceLog.log "Creating Contents for Profiling Warehouse DB"
+	($out = C:\Informatica\10.1.1\isp\bin\infacmd ps createWH -dn $domainName -un $domainUser -pd $domainPassword -dsn DataIntegrationService ) | Out-Null 
+	ac C:\DQServiceLog.log $out
+
+    ac  C:\DQServiceLog.log "Enabling CMS"
+    ($out = C:\Informatica\10.1.1\isp\bin\infacmd enableService -dn $domainName -un $domainUser -pd $domainPassword -sn ContentManagementService ) | Out-Null 
+    ac C:\DQServiceLog.log $out
+
+	ac  C:\DQServiceLog.log "Creating Audit Tables for CMS"
+    ($out = C:\Informatica\10.1.1\isp\bin\infacmd cms createAuditTables -dn $domainName -un $domainUser -pd $domainPassword -sn ContentManagementService ) | Out-Null 
+    ac C:\DQServiceLog.log $out
+
+    ac  C:\DQServiceLog.log "Enabling AS"
+    ($out = C:\Informatica\10.1.1\isp\bin\infacmd enableService -dn $domainName -un $domainUser -pd $domainPassword -sn AnalystService ) | Out-Null 
+    ac C:\DQServiceLog.log $out
+
+	# rm $infaLicenseFile
+}
 
 echo Informatica setup Complete.
