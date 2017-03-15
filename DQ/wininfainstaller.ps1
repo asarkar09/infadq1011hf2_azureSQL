@@ -38,7 +38,7 @@ Param(
 #Adding Windows firewall inbound rule
 echo Adding firewall rules for Informatica domain service ports
 netsh  advfirewall firewall add rule name="Informatica_DataQuality" dir=in action=allow profile=any localport=6005-6113 protocol=TCP
-netsh  advfirewall firewall add rule name="Informatica_AnalystService" dir=in action=allow profile=any localport=8085-8086 protocol=TCP
+netsh  advfirewall firewall add rule name="Informatica_AnalystService" dir=in action=allow profile=any localport=8080-8180 protocol=TCP
 
 $shareName = "infaaeshare"
 
@@ -95,6 +95,7 @@ runas /user:$osUserName net use I: \\$storageName.file.core.windows.net\$shareNa
 #Services
 $dataaccessstring=$dbHost+"@"+$dbName
 $metadataaccessstring="'jdbc:informatica:sqlserver://"+$dbAddress+";SelectMethod=cursor;databaseName="+$dbName+"'"
+$mrsdbcustomstring="jdbc:informatica:sqlserver://"+$dbAddress+";DatabaseName="+$dbName+";SnapshotSerializable=true"
 
 echo Editing Informatica silent installation file
 (gc $propertyFile | %{$_ -replace '^LICENSE_KEY_LOC=.*$',"LICENSE_KEY_LOC=$infaLicenseFile"  `
@@ -143,27 +144,7 @@ echo Editing Informatica silent installation file
 `
 -replace '^DOMAIN_CNFRM_PSSWD=.*$',"DOMAIN_CNFRM_PSSWD=$domainPassword" `
 `
--replace '^DB_PASSWD=.*$',"DB_PASSWD=$dbPassword" `
-`
--replace '^CREATE_SERVICES=.*$',"CREATE_SERVICES=1" `
-`
--replace '^MRS_DB_TYPE=.*$',"MRS_DB_TYPE=MSSQLServer" `
-`
--replace '^MRS_DB_UNAME=.*$',"MRS_DB_UNAME=$mrsdbuser" `
-`
--replace '^MRS_DB_PASSWD=.*$',"MRS_DB_PASSWD=$mrsdbpwd" `
-`
--replace '^MRS_DB_SERVICENAME=.*$',"MRS_DB_SERVICENAME=$dbName" `
-`
--replace '^MRS_DB_ADDRESS=.*$',"MRS_DB_ADDRESS=$dbAddress" `
-`
--replace '^MRS_SERVICE_NAME=.*$',"MRS_SERVICE_NAME=ModelRepositoryService" `
-`
--replace '^DIS_SERVICE_NAME=.*$',"DIS_SERVICE_NAME=DataIntegrationService" `
-`
--replace '^DIS_PROTOCOL_TYPE=.*$',"DIS_PROTOCOL_TYPE=http" `
-`
--replace '^DIS_HTTP_PORT=.*$',"DIS_HTTP_PORT=8095"
+-replace '^DB_PASSWD=.*$',"DB_PASSWD=$dbPassword" 
 
 }) | sc $propertyFile
 
@@ -186,19 +167,28 @@ if($infaLicenseFile -ne "") {
 }
 
 function createDQServices() {
-	ac  C:\DQServiceLog.log "Create STAGE connection"
+
+	ac  C:\DQServiceLog.log "Creating STAGE connection"
     ($out = C:\Informatica\10.1.1\isp\bin\infacmd createConnection -dn $domainName -un $domainUser -pd $domainPassword -cn STAGE -cid STAGE -ct SQLSERVER -cun $refdatadbuser -cpd $refdatadbpwd -o CodePage='UTF-8' DataAccessConnectString=''$dataaccessstring'' MetadataAccessConnectString='"'$metadataaccessstring''"" ) | Out-Null
 	ac C:\InfaServiceLog.log $out
 
-	ac  C:\DQServiceLog.log "Create PROFILE connection"
+	ac  C:\DQServiceLog.log "Creating PROFILE connection"
     ($out = C:\Informatica\10.1.1\isp\bin\infacmd createConnection -dn $domainName -un $domainUser -pd $domainPassword -cn PROFILE -cid PROFILE -ct SQLSERVER -cun $profiledbuser -cpd $profiledbpwd -o CodePage='UTF-8' DataAccessConnectString=''$dataaccessstring'' MetadataAccessConnectString='"'$metadataaccessstring''"" ) | Out-Null
 	ac C:\InfaServiceLog.log $out
 
-    ac  C:\DQServiceLog.log "Create Content Management Service"
+    ac  C:\InfaServiceLog.log "Creating Model Repository Service"
+    ($out = C:\Informatica\10.1.1\isp\bin\infacmd mrs createService -dn $domainName -nn $nodeName -un $domainUser -pd $domainPassword -sn ModelRepositoryService -du $mrsdbuser -dp $mrsdbpwd -dl $mrsdbcustomstring -dt SQLSERVER ) | Out-Null
+    ac C:\InfaServiceLog.log $out
+
+    ac  C:\InfaServiceLog.log "Creating Data Integration Service"
+    ($out = C:\Informatica\10.1.1\isp\bin\infacmd dis createService -dn $domainName -nn $nodeName -un $domainUser -pd $domainPassword -sn DataIntegrationService -rs ModelRepositoryService -rsun $domainUser -rspd $domainPassword -HttpPort 8095 ) | Out-Null
+    ac C:\InfaServiceLog.log $out
+
+    ac  C:\DQServiceLog.log "Creating Content Management Service"
     ($out = C:\Informatica\10.1.1\isp\bin\infacmd cms createService -dn $domainName -nn $nodeName -un $domainUser -pd $domainPassword -sn ContentManagementService -ds DataIntegrationService -rs ModelRepositoryService -rsu $domainUser -rsp $domainPassword -rdl STAGE -HttpPort 8105 ) | Out-Null
 	ac C:\InfaServiceLog.log $out
 
-    ac  C:\DQServiceLog.log "Create Analyst Service"
+    ac  C:\DQServiceLog.log "Creating Analyst Service"
     ($out = C:\Informatica\10.1.1\isp\bin\infacmd as createService -dn $domainName -nn $nodeName -un $domainUser -pd $domainpass -sn AnalystService -ds DataIntegrationService -rs ModelRepositoryService -au $domainUser -ap $domainPassword -HttpPort 8085 ) | Out-Null
     ac C:\InfaServiceLog.log $out
 }
