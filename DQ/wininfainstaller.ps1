@@ -25,14 +25,20 @@ Param(
   [string]$storageKey,
   [string]$infaLicense,
   [string]$mrsdbuser,
-  [string]$mrsdbpwd
+  [string]$mrsdbpwd,
+  [string]$refdatadbuser,
+  [string]$refdatadbpwd,
+  [string]$profiledbuser,
+  [string]$profiledbpwd
 )
+
 
 #echo $domainHost $domainName $domainUser $domainPassword $nodeName $nodePort $dbType $dbName $dbUser $dbPassword $dbHost $dbPort $sitekeyKeyword $joinDomain $masterNodeHost $osUserName $infaEdition $storageName $storageKey $infaLicense
 
 #Adding Windows firewall inbound rule
 echo Adding firewall rules for Informatica domain service ports
-netsh  advfirewall firewall add rule name="Informatica_PowerCenter" dir=in action=allow profile=any localport=6005-6113 protocol=TCP
+netsh  advfirewall firewall add rule name="Informatica_DataQuality" dir=in action=allow profile=any localport=6005-6113 protocol=TCP
+netsh  advfirewall firewall add rule name="Informatica_AnalystService" dir=in action=allow profile=any localport=8085-8086 protocol=TCP
 
 $shareName = "infaaeshare"
 
@@ -85,6 +91,10 @@ $cmd = "net use I: \\$storageName.file.core.windows.net\$shareName /u:$storageNa
 $cmd | Set-Content "$env:SystemDrive\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\MountShareDrive.cmd"
 
 runas /user:$osUserName net use I: \\$storageName.file.core.windows.net\$shareName /u:$storageName $storageKey
+
+#Services
+$dataaccessstring=$dbHost+"@"+$dbName
+$metadataaccessstring="'jdbc:informatica:sqlserver://"+$dbAddress+";SelectMethod=cursor;databaseName="+$dbName+"'"
 
 echo Editing Informatica silent installation file
 (gc $propertyFile | %{$_ -replace '^LICENSE_KEY_LOC=.*$',"LICENSE_KEY_LOC=$infaLicenseFile"  `
@@ -173,6 +183,24 @@ Rename-Item $installerHome/source_temp $installerHome/source
 
 if($infaLicenseFile -ne "") {
 	rm $infaLicenseFile
+}
+
+function createDQServices() {
+	ac  C:\DQServiceLog.log "Create STAGE connection"
+    ($out = C:\Informatica\10.1.1\isp\bin\infacmd createConnection -dn $domainName -un $domainUser -pd $domainPassword -cn STAGE -cid STAGE -ct SQLSERVER -cun $refdatadbuser -cpd $refdatadbpwd -o CodePage='UTF-8' DataAccessConnectString=''$dataaccessstring'' MetadataAccessConnectString='"'$metadataaccessstring''"" ) | Out-Null
+	ac C:\InfaServiceLog.log $out
+
+	ac  C:\DQServiceLog.log "Create PROFILE connection"
+    ($out = C:\Informatica\10.1.1\isp\bin\infacmd createConnection -dn $domainName -un $domainUser -pd $domainPassword -cn PROFILE -cid PROFILE -ct SQLSERVER -cun $profiledbuser -cpd $profiledbpwd -o CodePage='UTF-8' DataAccessConnectString=''$dataaccessstring'' MetadataAccessConnectString='"'$metadataaccessstring''"" ) | Out-Null
+	ac C:\InfaServiceLog.log $out
+
+    ac  C:\DQServiceLog.log "Create Content Management Service"
+    ($out = C:\Informatica\10.1.1\isp\bin\infacmd cms createService -dn $domainName -nn $nodeName -un $domainUser -pd $domainPassword -sn ContentManagementService -ds DataIntegrationService -rs ModelRepositoryService -rsu $domainUser -rsp $domainPassword -rdl STAGE -HttpPort 8105 ) | Out-Null
+	ac C:\InfaServiceLog.log $out
+
+    ac  C:\DQServiceLog.log "Create Analyst Service"
+    ($out = C:\Informatica\10.1.1\isp\bin\infacmd as createService -dn $domainName -nn $nodeName -un $domainUser -pd $domainpass -sn AnalystService -ds DataIntegrationService -rs ModelRepositoryService -au $domainUser -ap $domainPassword -HttpPort 8085 ) | Out-Null
+    ac C:\InfaServiceLog.log $out
 }
 
 echo Informatica setup Complete.
