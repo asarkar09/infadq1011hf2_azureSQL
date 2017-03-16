@@ -92,15 +92,13 @@ $cmd | Set-Content "$env:SystemDrive\ProgramData\Microsoft\Windows\Start Menu\Pr
 
 runas /user:$osUserName net use I: \\$storageName.file.core.windows.net\$shareName /u:$storageName $storageKey
 
-#Services Strings
+#Services connection strings
 $dataaccessstring=$dbHost+"@"+$dbName
 $metadataaccessstring="'jdbc:informatica:sqlserver://"+$dbAddress+";SelectMethod=cursor;databaseName="+$dbName+"'"
 $mrsdbcustomstring="jdbc:informatica:sqlserver://"+$dbAddress+";DatabaseName="+$dbName+";SnapshotSerializable=true"
 
 echo Editing Informatica silent installation file
-(gc $propertyFile | %{$_ -replace '^LICENSE_KEY_LOC=.*$',"LICENSE_KEY_LOC=$infaLicenseFile"  `
-`
--replace '^CREATE_DOMAIN=.*$',"CREATE_DOMAIN=$createDomain"  `
+(gc $propertyFile | %{$_ -replace '^CREATE_DOMAIN=.*$',"CREATE_DOMAIN=$createDomain"  `
 `
 -replace '^JOIN_DOMAIN=.*$',"JOIN_DOMAIN=$joinDomain"  `
 `
