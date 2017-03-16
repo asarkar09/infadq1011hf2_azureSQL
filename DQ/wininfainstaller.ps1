@@ -193,8 +193,14 @@ createDQServices
 
 if($infaLicenseFile -ne "") {
 
+	ac  C:\DQServiceLog.log "Retrieve License Name"
+	($License = C:\Informatica\10.1.1\isp\bin\infacmd listLicenses -dn $domainName -un $domainUser -pd $domainPassword ) | Out-Null 
+	$LicenseArr = ("$License").Split(" ")
+	$LicenseName = $LicenseArr[0]
+	ac C:\DQServiceLog.log $LicenseName
+
     ac  C:\DQServiceLog.log "Assigning License"
-    ($out = C:\Informatica\10.1.1\isp\bin\infacmd assignLicense -dn $domainName -un $domainUser -pd $domainPassword -ln License -sn ModelRepositoryService DataIntegrationService ContentManagementService AnalystService ) | Out-Null 
+    ($out = C:\Informatica\10.1.1\isp\bin\infacmd assignLicense -dn $domainName -un $domainUser -pd $domainPassword -ln $LicenseName -sn ModelRepositoryService DataIntegrationService ContentManagementService AnalystService ) | Out-Null 
     ac C:\DQServiceLog.log $out
         
     ac  C:\DQServiceLog.log "Enabling MRS"
