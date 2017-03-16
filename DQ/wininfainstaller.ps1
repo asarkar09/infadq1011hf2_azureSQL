@@ -98,7 +98,9 @@ $metadataaccessstring="'jdbc:informatica:sqlserver://"+$dbAddress+";SelectMethod
 $mrsdbcustomstring="jdbc:informatica:sqlserver://"+$dbAddress+";DatabaseName="+$dbName+";SnapshotSerializable=true"
 
 echo Editing Informatica silent installation file
-(gc $propertyFile | %{$_ -replace '^CREATE_DOMAIN=.*$',"CREATE_DOMAIN=$createDomain"  `
+(gc $propertyFile | %{$_ -replace '^LICENSE_KEY_LOC=.*$',"LICENSE_KEY_LOC=$infaLicenseFile"  `
+`
+-replace '^CREATE_DOMAIN=.*$',"CREATE_DOMAIN=$createDomain"  `
 `
 -replace '^JOIN_DOMAIN=.*$',"JOIN_DOMAIN=$joinDomain"  `
 `
@@ -190,10 +192,6 @@ function createDQServices() {
 createDQServices
 
 if($infaLicenseFile -ne "") {
-
-    ac  C:\DQServiceLog.log "Creating License"
-	($out = C:\Informatica\10.1.1\isp\bin\infacmd addlicense -dn $domainName -un $domainUser -pd $domainPassword -ln License -lf $infaLicenseFile ) | Out-Null 
-    ac C:\DQServiceLog.log $out
 
     ac  C:\DQServiceLog.log "Assigning License"
     ($out = C:\Informatica\10.1.1\isp\bin\infacmd assignLicense -dn $domainName -un $domainUser -pd $domainPassword -ln License -sn ModelRepositoryService DataIntegrationService ContentManagementService AnalystService ) | Out-Null 
