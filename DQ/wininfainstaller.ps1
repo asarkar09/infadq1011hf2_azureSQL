@@ -202,7 +202,7 @@ if($infaLicenseFile -ne "") {
     ac  C:\DQServiceLog.log "Assigning License"
     ($out = C:\Informatica\10.1.1\isp\bin\infacmd assignLicense -dn $domainName -un $domainUser -pd $domainPassword -ln $LicenseName -sn ModelRepositoryService DataIntegrationService ContentManagementService AnalystService ) | Out-Null 
     ac C:\DQServiceLog.log $out
-        
+
     ac  C:\DQServiceLog.log "Enabling MRS"
     ($out = C:\Informatica\10.1.1\isp\bin\infacmd enableService -dn $domainName -un $domainUser -pd $domainPassword -sn ModelRepositoryService ) | Out-Null 
     ac C:\DQServiceLog.log $out
@@ -214,7 +214,7 @@ if($infaLicenseFile -ne "") {
     ac  C:\DQServiceLog.log "Assiging Profile connection to DIS"
 	($out = C:\Informatica\10.1.1\isp\bin\infacmd dis updateServiceoptions -dn $domainName -un $domainUser -pd $domainPassword -sn DataIntegrationService -o "ProfilingServiceOptions.ProfileWarehouseConnectionName=PROFILE" ) | Out-Null
 	ac C:\DQServiceLog.log $out
-	    
+	
     ac  C:\DQServiceLog.log "Enabling DIS"
     ($out = C:\Informatica\10.1.1\isp\bin\infacmd enableService -dn $domainName -un $domainUser -pd $domainPassword -sn DataIntegrationService ) | Out-Null 
     ac C:\DQServiceLog.log $out
@@ -235,7 +235,7 @@ if($infaLicenseFile -ne "") {
     ($out = C:\Informatica\10.1.1\isp\bin\infacmd enableService -dn $domainName -un $domainUser -pd $domainPassword -sn AnalystService ) | Out-Null 
     ac C:\DQServiceLog.log $out
 
-	# rm $infaLicenseFile
+	rm $infaLicenseFile
 }
 
 echo Informatica setup Complete.
