@@ -25,19 +25,31 @@ storageKey=${17}
 
 domainLicenseURL=${18}
 
+mrsdbuser=${19}
+mrsdbpwd=${20}
+refdatadbuser=${21}
+refdatadbpwd=${22}
+profiledbuser=${23}
+profiledbpwd=${24}
+
 echo Starting Informatica setup...
 echo Number of parameters $#
 #echo $domainHost $domainName $domainUser $domainPassword $nodeName $nodePort $dbType $dbName $dbUser $dbPassword $dbHost $dbPort $sitekeyKeyword $joinDomain $osUserName $storageName $storageKey $domainLicenseURL
 
 #Usage
-if [ $# -ne 18 ]
+if [ $# -ne 24 ]
 then
-	echo lininfainstaller.sh domainHost domainName domainUser domainPassword nodeName nodePort dbType dbName dbUser dbPassword dbHost dbPort sitekeyKeyword joinDomain  osUserName storageName storageKey domainLicenseURL
+	echo lininfainstaller.sh domainHost domainName domainUser domainPassword nodeName nodePort dbType dbName dbUser dbPassword dbHost dbPort sitekeyKeyword joinDomain  osUserName storageName storageKey domainLicenseURL mrsdbuser mrsdbpwd refdatadbuser refdatadbpwd profiledbuser profiledbpwd
 	exit -1
 fi
 
 dbaddress=$dbHost:$dbPort
 hostname=`hostname`
+
+#preparing connection strings
+dataacccessstring=$dbHost"@"$dbName
+metadataaccessstring="'jdbc:informatica:sqlserver://"$dbaddress";SelectMethod=cursor;databaseName="$dbName"'"
+mrscustomstring="jdbc:informatica:sqlserver://"$dbaddress";DatabaseName="$dbName";SnapshotSerializable=true"
 
 informaticaopt=/opt/Informatica
 infainstallerloc=$informaticaopt/Archive/server
@@ -58,6 +70,7 @@ licensekeylocation=\\/opt\\/Informatica\\/license.key
 echo Adding firewall rules for Informatica domain service ports
 iptables -A IN_public_allow -p tcp -m tcp --dport 6005:6008 -m conntrack --ctstate NEW -j ACCEPT
 iptables -A IN_public_allow -p tcp -m tcp --dport 6014:6114 -m conntrack --ctstate NEW -j ACCEPT
+iptables -A IN_public_allow -p tcp -m tcp --dport 8080:8180 -m conntrack --ctstate NEW -j ACCEPT
 
 JRE_HOME="$infainstallerloc/source/java/jre"
 export JRE_HOME		
@@ -167,15 +180,40 @@ mv $infainstallerloc/source_temp/* $infainstallerloc/source
 rm $infainstallerloc/unjar_esd.sh
 mv $infainstallerloc/unjar_esd.sh_temp $infainstallerloc/unjar_esd.sh
 
-if [ -f $informaticaopt/license.key ]
-then
-	rm $informaticaopt/license.key
-fi
 
 echo Changing ownership of directories
 chown -R $osUserName $infainstallionlocown
 chown -R $osUserName $informaticaopt 
 chown -R $osUserName $mountdir
 chown -R $osUserName /home/$osUserName
+
+function createDQServices {
+    echo "Creating DQ services Start" >> $informaticaopt/InfaServiceLog.log
+	
+	echo "Creating STAGE connection" >> $informaticaopt/InfaServiceLog.log
+	sh /home/Informatica/10.1.1/isp/bin/infacmd.sh createConnection -dn $domainName -un $domainUser -pd $domainPassword -cn STAGE -cid STAGE -ct SQLSERVER -cun $refdatadbuser -cpd $refdatadbpwd -o CodePage='UTF-8' DataAccessConnectString=''$dataacccessstring'' MetadataAccessConnectString=''$metadataaccessstring'' &>> $informaticaopt/InfaServiceLog.log
+
+	echo "Creating PROFILE connection" >> $informaticaopt/InfaServiceLog.log
+	sh /home/Informatica/10.1.1/isp/bin/infacmd.sh createConnection -dn $domainName -un $domainUser -pd $domainPassword -cn PROFILE -cid PROFILE -ct SQLSERVER -cun $profiledbuser -cpd $profiledbpwd -o CodePage='UTF-8' DataAccessConnectString=''$dataacccessstring'' MetadataAccessConnectString=''$metadataaccessstring'' &>> $informaticaopt/InfaServiceLog.log
+
+	echo "Creating Model Repository Service" >> $informaticaopt/InfaServiceLog.log
+	sh /home/Informatica/10.1.1/isp/bin/infacmd.sh mrs createService -dn $domainName -nn $nodeName -un $domainUser -pd $domainPassword -sn ModelRepositoryService -du $mrsdbuser -dp $mrsdbpwd -dl $mrscustomstring -dt SQLSERVER &>> $informaticaopt/InfaServiceLog.log
+	
+	echo "Creating Data Integration Service" >> $informaticaopt/InfaServiceLog.log
+	sh /home/Informatica/10.1.1/isp/bin/infacmd.sh dis createService -dn $domainName -nn $nodeName -un $domainUser -pd $domainPassword -sn DataIntegrationService -rs ModelRepositoryService -rsun $domainUser -rspd $domainPassword -HttpPort 8095 &>> $informaticaopt/InfaServiceLog.log
+	
+	echo "Creating Content Management Service" >> $informaticaopt/InfaServiceLog.log
+	sh /home/Informatica/10.1.1/isp/bin/infacmd.sh cms createService -dn $domainName -nn $nodeName -un $domainUser -pd $domainPassword -sn ContentManagementService -ds DataIntegrationService -rs ModelRepositoryService -rsu $domainUser -rsp $domainPassword -rdl STAGE -HttpPort 8105 &>> $informaticaopt/InfaServiceLog.log
+	
+	echo "Creating Analyst Service" >> $informaticaopt/InfaServiceLog.log
+	sh /home/Informatica/10.1.1/isp/bin/infacmd.sh as createService -dn $domainName -nn $nodeName -un $domainUser -pd $domainPassword -sn AnalystService -ds DataIntegrationService -rs ModelRepositoryService -au $domainUser -ap $domainPassword -HttpPort 8085 &>> $informaticaopt/InfaServiceLog.log
+
+}
+
+if [ -f $informaticaopt/license.key ]
+then
+	rm $informaticaopt/license.key
+fi
+
 
 echo Informatica setup Complete.
