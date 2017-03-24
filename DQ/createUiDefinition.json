@@ -392,96 +392,116 @@
           },
           {
             "name": "dqConfig",
-            "label": "DQ Database Settings",
+            "label": "Informatica DQ Services",
             "subLabel": {
-              "preValidation": "Configure DQ Database Settings",
               "postValidation": "Done"
             },
-            "bladeTitle": "DQ Database Settings",
+            "bladeTitle": "Informatica DQ Services",
             "elements": [
               {
-                "name": "mrsDBuser",
-                "type": "Microsoft.Common.TextBox",
-                "label": "MRS DB Username",
-                "defaultValue": "",
-                "toolTip": "Database user to be created for MRS",
-                "constraints": {
-                  "required": true,
-                  "regex": "(?!^(p|P)(u|U)(b|B)(l|L)(i|I)(c|C)$)(?!^(d|D)(b|B)(o|O)$)(?!^(s|S)(y|Y)(s|S)$)(?!^(g|G)(u|U)(e|E)(s|S)(t|T)$)(^[a-zA-Z][a-zA-Z0-9_-]{2,127}.*$)",
-                  "validationMessage": "Username must begin with an alphabet, only alphanumeric characters, hyphen and underscore are allowed, and the value must be 3-128 characters in length. Usernames sa, public, dbo, sys, and guest are not allowed"
-                }
+                "name": "mrsdbconfig",
+                "type": "Microsoft.Common.Section",
+                "label": "Model Repository Configuration",
+                "elements": [
+                  {
+                    "name": "mrsDBuser",
+                    "type": "Microsoft.Common.TextBox",
+                    "label": "Model Repository DB Username",
+                    "defaultValue": "",
+                    "toolTip": "Database user to be created for Model Repository Service",
+                    "constraints": {
+                      "required": true,
+                      "regex": "(?!^(p|P)(u|U)(b|B)(l|L)(i|I)(c|C)$)(?!^(d|D)(b|B)(o|O)$)(?!^(s|S)(y|Y)(s|S)$)(?!^(g|G)(u|U)(e|E)(s|S)(t|T)$)(^[a-zA-Z][a-zA-Z0-9_-]{2,127}.*$)",
+                      "validationMessage": "Username must begin with an alphabet, only alphanumeric characters, hyphen and underscore are allowed, and the value must be 3-128 characters in length. Usernames sa, public, dbo, sys, and guest are not allowed"
+                    }
+                  },
+                  {
+                    "name": "mrsDBpassword",
+                    "type": "Microsoft.Common.PasswordBox",
+                    "label": {
+                      "password": "Model Repository DB Password",
+                      "confirmPassword": "Confirm Model Repository DB Password"
+                    },
+                    "constraints": {
+                      "required": true,
+                      "regex": "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[^\\s\\w])(?!.*[\"$]).{8,123}$",
+                      "validationMessage": "Password must be at least 8 characters in length. Should contain at least one special character, number, upper-case and lower-case character. Double quote(\") and dollar($) is not allowed"
+                    },
+                    "options": {
+                      "hideConfirmation": false
+                    }
+                  }
+                ]
               },
               {
-                "name": "mrsDBpassword",
-                "type": "Microsoft.Common.PasswordBox",
-                "label": {
-                  "password": "MRS DB Password",
-                  "confirmPassword": "Confirm MRS DB Password"
-                },
-                "constraints": {
-                  "required": true,
-                  "regex": "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[^\\s\\w])(?!.*[\"$]).{8,123}$",
-                  "validationMessage": "Password must be at least 8 characters in length. Should contain at least one special character, number, upper-case and lower-case character. Double quote(\") and dollar($) is not allowed"
-                },
-                "options": {
-                  "hideConfirmation": false
-                }
+                "name": "cmsdbconfig",
+                "type": "Microsoft.Common.Section",
+                "label": "Reference Data Configuration",
+                "elements": [
+                  {
+                    "name": "refDataDBuser",
+                    "type": "Microsoft.Common.TextBox",
+                    "label": "Reference Data DB Username",
+                    "defaultValue": "",
+                    "toolTip": "Database user to be created for Reference Data DB",
+                    "constraints": {
+                      "required": true,
+                      "regex": "(?!^(p|P)(u|U)(b|B)(l|L)(i|I)(c|C)$)(?!^(d|D)(b|B)(o|O)$)(?!^(s|S)(y|Y)(s|S)$)(?!^(g|G)(u|U)(e|E)(s|S)(t|T)$)(^[a-zA-Z][a-zA-Z0-9_-]{2,127}.*$)",
+                      "validationMessage": "Username must begin with an alphabet, only alphanumeric characters, hyphen and underscore are allowed, and the value must be 3-128 characters in length. Usernames sa, public, dbo, sys, and guest are not allowed"
+                    }
+                  },
+                  {
+                    "name": "refDataDBpassword",
+                    "type": "Microsoft.Common.PasswordBox",
+                    "label": {
+                      "password": "Reference Data DB Password",
+                      "confirmPassword": "Confirm Reference Data DB Password"
+                    },
+                    "constraints": {
+                      "required": true,
+                      "regex": "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[^\\s\\w])(?!.*[\"$]).{8,123}$",
+                      "validationMessage": "Password must be at least 8 characters in length. Should contain at least one special character, number, upper-case and lower-case character. Double quote(\") and dollar($) is not allowed"
+                    },
+                    "options": {
+                      "hideConfirmation": false
+                    }
+                  }
+                ]
               },
               {
-                "name": "refDataDBuser",
-                "type": "Microsoft.Common.TextBox",
-                "label": "Reference Data DB Username",
-                "defaultValue": "",
-                "toolTip": "Database user to be created for Reference Data DB",
-                "constraints": {
-                  "required": true,
-                  "regex": "(?!^(p|P)(u|U)(b|B)(l|L)(i|I)(c|C)$)(?!^(d|D)(b|B)(o|O)$)(?!^(s|S)(y|Y)(s|S)$)(?!^(g|G)(u|U)(e|E)(s|S)(t|T)$)(^[a-zA-Z][a-zA-Z0-9_-]{2,127}.*$)",
-                  "validationMessage": "Username must begin with an alphabet, only alphanumeric characters, hyphen and underscore are allowed, and the value must be 3-128 characters in length. Usernames sa, public, dbo, sys, and guest are not allowed"
-                }
-              },
-              {
-                "name": "refDataDBpassword",
-                "type": "Microsoft.Common.PasswordBox",
-                "label": {
-                  "password": "Reference Data DB Password",
-                  "confirmPassword": "Confirm Reference Data DB Password"
-                },
-                "constraints": {
-                  "required": true,
-                  "regex": "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[^\\s\\w])(?!.*[\"$]).{8,123}$",
-                  "validationMessage": "Password must be at least 8 characters in length. Should contain at least one special character, number, upper-case and lower-case character. Double quote(\") and dollar($) is not allowed"
-                },
-                "options": {
-                  "hideConfirmation": false
-                }
-              },
-              {
-                "name": "profileDBuser",
-                "type": "Microsoft.Common.TextBox",
-                "label": "Profiling Warehouse DB Username",
-                "defaultValue": "",
-                "toolTip": "Database user to be created for Profiling Warehouse",
-                "constraints": {
-                  "required": true,
-                  "regex": "(?!^(p|P)(u|U)(b|B)(l|L)(i|I)(c|C)$)(?!^(d|D)(b|B)(o|O)$)(?!^(s|S)(y|Y)(s|S)$)(?!^(g|G)(u|U)(e|E)(s|S)(t|T)$)(^[a-zA-Z][a-zA-Z0-9_-]{2,127}.*$)",
-                  "validationMessage": "Username must begin with an alphabet, only alphanumeric characters, hyphen and underscore are allowed, and the value must be 3-128 characters in length. Usernames sa, public, dbo, sys, and guest are not allowed"
-                }
-              },
-              {
-                "name": "profileDBpassword",
-                "type": "Microsoft.Common.PasswordBox",
-                "label": {
-                  "password": "Profiling Warehouse DB Password",
-                  "confirmPassword": "Confirm Profiling Warehouse DB Password"
-                },
-                "constraints": {
-                  "required": true,
-                  "regex": "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[^\\s\\w])(?!.*[\"$]).{8,123}$",
-                  "validationMessage": "Password must be at least 8 characters in length. Should contain at least one special character, number, upper-case and lower-case character. Double quote(\") and dollar($) is not allowed"
-                },
-                "options": {
-                  "hideConfirmation": false
-                }
+                "name": "profiledbconfig",
+                "type": "Microsoft.Common.Section",
+                "label": "Profiling Warehouse Configuration",
+                "elements": [
+                  {
+                    "name": "profileDBuser",
+                    "type": "Microsoft.Common.TextBox",
+                    "label": "Profiling Warehouse DB Username",
+                    "defaultValue": "",
+                    "toolTip": "Database user to be created for Profiling Warehouse",
+                    "constraints": {
+                      "required": true,
+                      "regex": "(?!^(p|P)(u|U)(b|B)(l|L)(i|I)(c|C)$)(?!^(d|D)(b|B)(o|O)$)(?!^(s|S)(y|Y)(s|S)$)(?!^(g|G)(u|U)(e|E)(s|S)(t|T)$)(^[a-zA-Z][a-zA-Z0-9_-]{2,127}.*$)",
+                      "validationMessage": "Username must begin with an alphabet, only alphanumeric characters, hyphen and underscore are allowed, and the value must be 3-128 characters in length. Usernames sa, public, dbo, sys, and guest are not allowed"
+                    }
+                  },
+                  {
+                    "name": "profileDBpassword",
+                    "type": "Microsoft.Common.PasswordBox",
+                    "label": {
+                      "password": "Profiling Warehouse DB Password",
+                      "confirmPassword": "Confirm Profiling Warehouse DB Password"
+                    },
+                    "constraints": {
+                      "required": true,
+                      "regex": "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[^\\s\\w])(?!.*[\"$]).{8,123}$",
+                      "validationMessage": "Password must be at least 8 characters in length. Should contain at least one special character, number, upper-case and lower-case character. Double quote(\") and dollar($) is not allowed"
+                    },
+                    "options": {
+                      "hideConfirmation": false
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -563,12 +583,12 @@
         "dbVMAdminPassword": "[steps('databaseConfiguration').databaseconfig.dbVMAdminPassword.password]",
         "dbUser": "[steps('databaseConfiguration').databaseuser.infaDomainDBUser]",
         "dbPassword": "[steps('databaseConfiguration').databaseuser.infaDomainDBPassword]",
-        "mrsdbuser": "[steps('dqConfig').mrsDBuser]",
-        "mrsdbpwd": "[steps('dqConfig').mrsDBpassword]",
-        "refdatadbuser": "[steps('dqConfig').refDataDBuser]",
-        "refdatadbpwd": "[steps('dqConfig').refDataDBpassword]",
-        "profiledbuser": "[steps('dqConfig').profileDBuser]",
-        "profiledbpwd": "[steps('dqConfig').profileDBpassword]",
+        "mrsdbuser": "[steps('dqConfig').mrsdbconfig.mrsDBuser]",
+        "mrsdbpwd": "[steps('dqConfig').mrsdbconfig.mrsDBpassword]",
+        "refdatadbuser": "[steps('dqConfig').cmsdbconfig.refDataDBuser]",
+        "refdatadbpwd": "[steps('dqConfig').cmsdbconfig.refDataDBpassword]",
+        "profiledbuser": "[steps('dqConfig').profiledbconfig.profileDBuser]",
+        "profiledbpwd": "[steps('dqConfig').profiledbconfig.profileDBpassword]",
         "storageName": "[steps('infraConfiguration').storageAccount.name]",
         "storageType": "[steps('infraConfiguration').storageAccount.type]",
         "storageExistingOrNew": "[steps('infraConfiguration').storageAccount.newOrExisting]",
