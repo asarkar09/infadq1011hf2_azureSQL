@@ -402,7 +402,7 @@
               {
                 "name": "mrsDBuser",
                 "type": "Microsoft.Common.TextBox",
-                "label": "Informatica MRS DB Username",
+                "label": "MRS DB Username",
                 "defaultValue": "",
                 "toolTip": "Database user to be created for MRS",
                 "constraints": {
@@ -415,8 +415,8 @@
                 "name": "mrsDBpassword",
                 "type": "Microsoft.Common.PasswordBox",
                 "label": {
-                  "password": "Informatica MRS DB Password",
-                  "confirmPassword": "Confirm Informatica MRS DB Password"
+                  "password": "MRS DB Password",
+                  "confirmPassword": "Confirm MRS DB Password"
                 },
                 "constraints": {
                   "required": true,
@@ -430,7 +430,7 @@
               {
                 "name": "refDataDBuser",
                 "type": "Microsoft.Common.TextBox",
-                "label": "Informatica Reference Data DB Username",
+                "label": "Reference Data DB Username",
                 "defaultValue": "",
                 "toolTip": "Database user to be created for Reference Data DB",
                 "constraints": {
@@ -443,8 +443,8 @@
                 "name": "refDataDBpassword",
                 "type": "Microsoft.Common.PasswordBox",
                 "label": {
-                  "password": "Informatica Reference Data DB Password",
-                  "confirmPassword": "Confirm Informatica Reference Data DB Password"
+                  "password": "Reference Data DB Password",
+                  "confirmPassword": "Confirm Reference Data DB Password"
                 },
                 "constraints": {
                   "required": true,
@@ -458,7 +458,7 @@
               {
                 "name": "profileDBuser",
                 "type": "Microsoft.Common.TextBox",
-                "label": "Informatica Profiling Warehouse DB Username",
+                "label": "Profiling Warehouse DB Username",
                 "defaultValue": "",
                 "toolTip": "Database user to be created for Profiling Warehouse",
                 "constraints": {
@@ -471,8 +471,8 @@
                 "name": "profileDBpassword",
                 "type": "Microsoft.Common.PasswordBox",
                 "label": {
-                  "password": "Informatica Profiling Warehouse DB Password",
-                  "confirmPassword": "Confirm Informatica Profiling Warehouse DB Password"
+                  "password": "Profiling Warehouse DB Password",
+                  "confirmPassword": "Confirm Profiling Warehouse DB Password"
                 },
                 "constraints": {
                   "required": true,
