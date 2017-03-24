@@ -394,6 +394,7 @@
             "name": "dqConfig",
             "label": "Informatica DQ Services",
             "subLabel": {
+              "preValidation": "Configure Informatica DQ Services",
               "postValidation": "Done"
             },
             "bladeTitle": "Informatica DQ Services",
