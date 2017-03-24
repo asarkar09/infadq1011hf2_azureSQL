@@ -361,7 +361,7 @@
                   {
                     "name": "infaDomainDBUser",
                     "type": "Microsoft.Common.TextBox",
-                    "label": "Informatica domain DB user",
+                    "label": "Informatica Domain Database username",
                     "defaultValue": "",
                     "toolTip": "Database user to be created for communication between Domain and Database",
                     "constraints": {
@@ -374,8 +374,8 @@
                     "name": "infaDomainDBPassword",
                     "type": "Microsoft.Common.PasswordBox",
                     "label": {
-                      "password": "Informatica domain DB password",
-                      "confirmPassword": "Confirm Informatica domain DB password"
+                      "password": "Informatica Domain Database password",
+                      "confirmPassword": "Confirm Informatica Domain Database password"
                     },
                     "constraints": {
                       "required": true,
@@ -392,12 +392,12 @@
           },
           {
             "name": "dqConfig",
-            "label": "Informatica DQ Services",
+            "label": "Informatica Data Quality Services",
             "subLabel": {
-              "preValidation": "Configure Informatica DQ Services",
+              "preValidation": "Configure Informatica Data Quality Services",
               "postValidation": "Done"
             },
-            "bladeTitle": "Informatica DQ Services",
+            "bladeTitle": "Informatica Data Quality Services",
             "elements": [
               {
                 "name": "mrsdbconfig",
@@ -407,7 +407,7 @@
                   {
                     "name": "mrsDBuser",
                     "type": "Microsoft.Common.TextBox",
-                    "label": "Model Repository DB Username",
+                    "label": "Database Username",
                     "defaultValue": "",
                     "toolTip": "Database user to be created for Model Repository Service",
                     "constraints": {
@@ -420,8 +420,8 @@
                     "name": "mrsDBpassword",
                     "type": "Microsoft.Common.PasswordBox",
                     "label": {
-                      "password": "Model Repository DB Password",
-                      "confirmPassword": "Confirm Model Repository DB Password"
+                      "password": "Database Password",
+                      "confirmPassword": "Confirm Database Password"
                     },
                     "constraints": {
                       "required": true,
@@ -442,9 +442,9 @@
                   {
                     "name": "refDataDBuser",
                     "type": "Microsoft.Common.TextBox",
-                    "label": "Reference Data DB Username",
+                    "label": "Database Username",
                     "defaultValue": "",
-                    "toolTip": "Database user to be created for Reference Data DB",
+                    "toolTip": "Database user to be created for Reference Data",
                     "constraints": {
                       "required": true,
                       "regex": "(?!^(p|P)(u|U)(b|B)(l|L)(i|I)(c|C)$)(?!^(d|D)(b|B)(o|O)$)(?!^(s|S)(y|Y)(s|S)$)(?!^(g|G)(u|U)(e|E)(s|S)(t|T)$)(^[a-zA-Z][a-zA-Z0-9_-]{2,127}.*$)",
@@ -455,8 +455,8 @@
                     "name": "refDataDBpassword",
                     "type": "Microsoft.Common.PasswordBox",
                     "label": {
-                      "password": "Reference Data DB Password",
-                      "confirmPassword": "Confirm Reference Data DB Password"
+                      "password": "Database Password",
+                      "confirmPassword": "Confirm Database Password"
                     },
                     "constraints": {
                       "required": true,
@@ -477,7 +477,7 @@
                   {
                     "name": "profileDBuser",
                     "type": "Microsoft.Common.TextBox",
-                    "label": "Profiling Warehouse DB Username",
+                    "label": "Database Username",
                     "defaultValue": "",
                     "toolTip": "Database user to be created for Profiling Warehouse",
                     "constraints": {
@@ -490,8 +490,8 @@
                     "name": "profileDBpassword",
                     "type": "Microsoft.Common.PasswordBox",
                     "label": {
-                      "password": "Profiling Warehouse DB Password",
-                      "confirmPassword": "Confirm Profiling Warehouse DB Password"
+                      "password": "Database Password",
+                      "confirmPassword": "Confirm Database Password"
                     },
                     "constraints": {
                       "required": true,
