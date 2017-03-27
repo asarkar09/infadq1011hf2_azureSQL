@@ -29,7 +29,7 @@
                 {
                   "name": "InformaticaService",
                   "properties": {
-                    "description": "Enabling ports required for Informatica.",
+                    "description": "Enabling ports required for Informatica Admin Console",
                     "protocol": "TCP",
                     "sourcePortRange": "*",
                     "destinationPortRange": "6005-6008",
@@ -41,12 +41,26 @@
                   }
                 },
                 {
-                  "name": "AnalystService",
+                  "name": "DomainService",
                   "properties": {
-                    "description": "Enabling ports required for Analyst Service.",
+                    "description": "Enabling ports required for Informatica Model Repository",
                     "protocol": "TCP",
                     "sourcePortRange": "*",
-                    "destinationPortRange": "8080-8180",
+                    "destinationPortRange": "6014-6114",
+                    "sourceAddressPrefix": "*",
+                    "destinationAddressPrefix": "*",
+                    "access": "Allow",
+                    "priority": 121,
+                    "direction": "Inbound"
+                  }
+                },
+                {
+                  "name": "AnalystService",
+                  "properties": {
+                    "description": "Enabling port required for Analyst Service.",
+                    "protocol": "TCP",
+                    "sourcePortRange": "*",
+                    "destinationPortRange": "8085",
                     "sourceAddressPrefix": "*",
                     "destinationAddressPrefix": "*",
                     "access": "Allow",
@@ -79,6 +93,20 @@
                     "destinationAddressPrefix": "*",
                     "access": "Allow",
                     "priority": 111,
+                    "direction": "Inbound"
+                  }
+                },
+                {
+                  "name": "MSSQL",
+                  "properties": {
+                    "description": "Enabling port for MS SQL",
+                    "protocol": "TCP",
+                    "sourcePortRange": "*",
+                    "destinationPortRange": "1433",
+                    "sourceAddressPrefix": "*",
+                    "destinationAddressPrefix": "*",
+                    "access": "Allow",
+                    "priority": 131,
                     "direction": "Inbound"
                   }
                 }
