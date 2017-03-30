@@ -1,90 +1,108 @@
 ﻿{
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {
-        "location": {
-            "type": "string"
-        },
-        "storageName": {
-            "type": "string"
-        },
-        "storageID": {
-            "type": "string"
-        },
-        "vnetName": {
-            "type": "string"
-        },
-        "subnetName": {
-            "type": "string"
-        },
-        "subnetId": {
-            "type": "string"
-        },
-        "nsgName": { 
-            "type": "string"
-        },
-        "dbVMName": {
-            "type": "string"
-        },
-        "dbUser": {
-            "type": "string"
-        },
-        "dbPassword": {
-            "type": "securestring"
-        },
-        "nodeVMSize": {
-            "type": "string"
-        },
-        "nodeVMOSType": {
-            "type": "string"
-        },
-        "nodeVMAdminUsername": {
-            "type": "string",
-            "minLength": 1
-        },
-        "nodeVMAdminPassword": {
-            "type": "securestring"
-        },
-        "nodeVMAdminSshPublicKey": {
-            "type": "securestring"
-        },
-        "nodeVMNamePrefix": {
-            "type": "string",
-            "minLength": 1
-        },
-        "nodeVMCount": {
-            "type": "int"
-        },
-        "infaDomainName": {
-            "type": "string",
-            "minLength": 4
-        },
-        "infaDomainUser": {
-            "type": "string",
-            "minLength": 4
-        },
-        "infaDomainPassword": {
-            "type": "securestring",
-            "minLength": 4
-        },
-        "infaNodeNamePrefix": {
-            "type": "string",
-            "minLength": 4
-        },
-        "infaKeyword": {
-            "type": "securestring",
-            "minLength": 4
-        },
-        "infaDomainLicense": {
-          "type": "string"
-        },
-        "baseUrl": {
-            "type": "string"
-        },
-        "informaticaTags": {
-            "type": "object" 
-        }
+  "parameters": {
+    "location": {
+      "type": "string"
     },
+    "storageName": {
+      "type": "string"
+    },
+    "storageID": {
+      "type": "string"
+    },
+    "vnetName": {
+      "type": "string"
+    },
+    "subnetName": {
+      "type": "string"
+    },
+    "subnetId": {
+      "type": "string"
+    },
+    "nsgName": {
+      "type": "string"
+    },
+    "dbVMName": {
+      "type": "string"
+    },
+    "dbUser": {
+      "type": "string"
+    },
+    "dbPassword": {
+      "type": "securestring"
+    },
+    "nodeVMSize": {
+      "type": "string"
+    },
+    "nodeVMOSType": {
+      "type": "string"
+    },
+    "nodeVMAdminUsername": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nodeVMAdminPassword": {
+      "type": "securestring"
+    },
+    "nodeVMAdminSshPublicKey": {
+      "type": "securestring"
+    },
+    "nodeVMNamePrefix": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nodeVMCount": {
+      "type": "int"
+    },
+    "infaDomainName": {
+      "type": "string",
+      "minLength": 4
+    },
+    "infaDomainUser": {
+      "type": "string",
+      "minLength": 4
+    },
+    "infaDomainPassword": {
+      "type": "securestring",
+      "minLength": 4
+    },
+    "infaNodeNamePrefix": {
+      "type": "string",
+      "minLength": 4
+    },
+    "infaKeyword": {
+      "type": "securestring",
+      "minLength": 4
+    },
+    "infaDomainLicense": {
+      "type": "string"
+    },
+    "baseUrl": {
+      "type": "string"
+    },
+    "mrsdbuser": {
+      "type": "string"
+    },
+    "mrsdbpwd": {
+      "type": "securestring"
+    },
+    "refdatadbuser": {
+      "type": "string"
+    },
+    "refdatadbpwd": {
+      "type": "securestring"
+    },
+    "profiledbuser": {
+      "type": "string"
+    },
+    "profiledbpwd": {
+      "type": "securestring"
+    },
+    "informaticaTags": {
+      "type": "object"
+    }
+  },
     "variables": {
         "index": 0,
         "nodeVMDNSName": "[toLower(concat(parameters('nodeVMNamePrefix'), add(variables('Index'), 1), uniqueString(resourceGroup().id, deployment().name)))]",
@@ -239,9 +257,9 @@
                                 "[concat(variables('extScriptURI'),  variables('extScriptFile'))]"
                             ]
                         },
-                        "protectedSettings": {
-                            "commandToExecute": "[concat('sudo sh ', variables('extScriptFile'), ' ', concat(parameters('nodeVMNamePrefix'), '1'), ' ', parameters('infaDomainName'), ' \"', parameters('infaDomainUser'), '\" \"', parameters('infaDomainPassword'), '\" ', parameters('infaNodeNamePrefix'), add(variables('index'), 1), ' ', variables('infaNodePort'), ' ', variables('dbType'), ' ', variables('dbInstanceName'), ' \"', parameters('dbUser'), '\" \"', parameters('dbPassword'), '\" ', parameters('dbVMName'), ' ', variables('dbPort'), ' \"', parameters('infaKeyword'), '\" ', variables('index'), ' \"', parameters('nodeVMAdminUsername'), '\" \"', parameters('storageName'), '\" ', listKeys(parameters('storageID'), '2016-01-01').keys[0].value, ' \"', parameters('infaDomainLicense'), '\"')]"
-                        }
+                      "protectedSettings": {
+                        "commandToExecute": "[concat('sudo sh ', variables('extScriptFile'), ' ', concat(parameters('nodeVMNamePrefix'), '1'), ' ', parameters('infaDomainName'), ' \"', parameters('infaDomainUser'), '\" \"', parameters('infaDomainPassword'), '\" ', parameters('infaNodeNamePrefix'), add(variables('index'), 1), ' ', variables('infaNodePort'), ' ', variables('dbType'), ' ', variables('dbInstanceName'), ' \"', parameters('dbUser'), '\" \"', parameters('dbPassword'), '\" ', parameters('dbVMName'), ' ', variables('dbPort'), ' \"', parameters('infaKeyword'), '\" ', variables('index'), ' \"', parameters('nodeVMAdminUsername'), '\" \"', parameters('storageName'), '\" ', listKeys(parameters('storageID'), '2016-01-01').keys[0].value, ' \"', parameters('infaDomainLicense'), '\" \"',parameters('mrsdbuser'),'\" \"',parameters('mrsdbpwd'),'\" \"',parameters('refdatadbuser'),'\" \"',parameters('refdatadbpwd'),'\" \"',parameters('profiledbuser'),'\" \"',parameters('profiledbpwd'),'\"')]"
+                      }
                     }
                 }
             ]
