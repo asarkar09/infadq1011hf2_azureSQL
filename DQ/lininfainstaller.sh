@@ -210,10 +210,47 @@ function createDQServices {
 
 }
 
+createDQServices
+
+
 if [ -f $informaticaopt/license.key ]
 then
+	
+	echo "Removing License Key"
 	rm $informaticaopt/license.key
-fi
 
+	echo "Retrieving License Name from Domain" >> $informaticaopt/InfaServiceLog.log
+	aamit=$(sh /home/Informatica/10.1.1/isp/bin/infacmd.sh listLicenses -dn $domainName -un $domainUser -pd $domainPassword)
+	infalicense=$aamit|cut -d ' ' -f 1
+	echo "License Name: " $infalicense >> $informaticaopt/InfaServiceLog.log
+
+	echo "Assigning License to all the services" >> $informaticaopt/InfaServiceLog.log
+	sh /home/Informatica/10.1.1/isp/bin/infacmd.sh assignLicense -dn $domainName -un $domainUser -pd $domainPassword -ln $infalicense -sn ModelRepositoryService DataIntegrationService ContentManagementService AnalystService >> $informaticaopt/InfaServiceLog.log
+
+	echo "Enabling Model Repository Service" >> $informaticaopt/InfaServiceLog.log
+    sh /home/Informatica/10.1.1/isp/bin/infacmd.sh enableService -dn $domainName -un $domainUser -pd $domainPassword -sn ModelRepositoryService >> $informaticaopt/InfaServiceLog.log
+
+	echo "Creating contents of Model Repository Service" >> $informaticaopt/InfaServiceLog.log
+	sh /home/Informatica/10.1.1/isp/bin/infacmd.sh mrs createContents -dn $domainName -un $domainUser -pd $domainPassword -sn ModelRepositoryService >> $informaticaopt/InfaServiceLog.log
+
+    echo "Assiging Profile connection to Data Integration Service" >> $informaticaopt/InfaServiceLog.log
+	sh /home/Informatica/10.1.1/isp/bin/infacmd.sh dis updateServiceoptions -dn $domainName -un $domainUser -pd $domainPassword -sn DataIntegrationService -o "ProfilingServiceOptions.ProfileWarehouseConnectionName=PROFILE" >> $informaticaopt/InfaServiceLog.log
+	
+    echo "Enabling Data Integration Service" >> $informaticaopt/InfaServiceLog.log
+    sh /home/Informatica/10.1.1/isp/bin/infacmd.sh enableService -dn $domainName -un $domainUser -pd $domainPassword -sn DataIntegrationService >> $informaticaopt/InfaServiceLog.log
+
+    echo "Creating Contents for Profiling Warehouse DataBase" >> $informaticaopt/InfaServiceLog.log
+	sh /home/Informatica/10.1.1/isp/bin/infacmd.sh ps createWH -dn $domainName -un $domainUser -pd $domainPassword -dsn DataIntegrationService >> $informaticaopt/InfaServiceLog.log
+
+    echo "Enabling Content Management Service" >> $informaticaopt/InfaServiceLog.log
+    sh /home/Informatica/10.1.1/isp/bin/infacmd.sh enableService -dn $domainName -un $domainUser -pd $domainPassword -sn ContentManagementService >> $informaticaopt/InfaServiceLog.log
+
+	echo "Creating Audit Table" >> $informaticaopt/InfaServiceLog.log
+    sh /home/Informatica/10.1.1/isp/bin/infacmd.sh cms createAuditTables -dn $domainName -un $domainUser -pd $domainPassword -sn ContentManagementService >> $informaticaopt/InfaServiceLog.log
+
+    echo "Enabling Analyst Service" >> $informaticaopt/InfaServiceLog.log
+    sh /home/Informatica/10.1.1/isp/bin/infacmd.sh enableService -dn $domainName -un $domainUser -pd $domainPassword -sn AnalystService >> $informaticaopt/InfaServiceLog.log
+
+fi
 
 echo Informatica setup Complete.
