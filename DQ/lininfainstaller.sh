@@ -220,12 +220,12 @@ then
 	rm $informaticaopt/license.key
 
 	echo "Retrieving License Name from Domain" >> $informaticaopt/InfaServiceLog.log
-	aamit=$(sh /home/Informatica/10.1.1/isp/bin/infacmd.sh listLicenses -dn $domainName -un $domainUser -pd $domainPassword)
-	infalicense=$aamit|cut -d ' ' -f 1
-	echo "License Name: " $infalicense >> $informaticaopt/InfaServiceLog.log
+	aamit=$(/home/Informatica/10.1.1/isp/bin/infacmd.sh listLicenses -dn $domainName -un $domainUser -pd $domainPassword)
+	license=$(echo $aamit | awk '{split($0,license," "); print license[1]}')
+	echo "License Name: " $license >> $informaticaopt/InfaServiceLog.log
 
 	echo "Assigning License to all the services" >> $informaticaopt/InfaServiceLog.log
-	sh /home/Informatica/10.1.1/isp/bin/infacmd.sh assignLicense -dn $domainName -un $domainUser -pd $domainPassword -ln $infalicense -sn ModelRepositoryService DataIntegrationService ContentManagementService AnalystService >> $informaticaopt/InfaServiceLog.log
+	sh /home/Informatica/10.1.1/isp/bin/infacmd.sh assignLicense -dn $domainName -un $domainUser -pd $domainPassword -ln $license -sn ModelRepositoryService DataIntegrationService ContentManagementService AnalystService >> $informaticaopt/InfaServiceLog.log
 
 	echo "Enabling Model Repository Service" >> $informaticaopt/InfaServiceLog.log
     sh /home/Informatica/10.1.1/isp/bin/infacmd.sh enableService -dn $domainName -un $domainUser -pd $domainPassword -sn ModelRepositoryService >> $informaticaopt/InfaServiceLog.log
