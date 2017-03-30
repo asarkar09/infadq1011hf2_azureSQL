@@ -70,7 +70,7 @@ licensekeylocation=\\/opt\\/Informatica\\/license.key
 echo Adding firewall rules for Informatica domain service ports
 iptables -A IN_public_allow -p tcp -m tcp --dport 6005:6008 -m conntrack --ctstate NEW -j ACCEPT
 iptables -A IN_public_allow -p tcp -m tcp --dport 6014:6114 -m conntrack --ctstate NEW -j ACCEPT
-iptables -A IN_public_allow -p tcp -m tcp --dport 8080:8180 -m conntrack --ctstate NEW -j ACCEPT
+iptables -A IN_public_allow -p tcp -m tcp --dport 8085 -m conntrack --ctstate NEW -j ACCEPT
 
 JRE_HOME="$infainstallerloc/source/java/jre"
 export JRE_HOME		
