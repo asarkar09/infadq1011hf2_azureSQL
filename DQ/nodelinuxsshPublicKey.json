@@ -173,44 +173,49 @@
                 }
             }
         },
-        {
-            "name": "[concat(parameters('nodeVMNamePrefix'), add(variables('index'), 1))]",
-            "type": "Microsoft.Compute/virtualMachines",
-            "location": "[parameters('location')]",
-            "apiVersion": "2016-03-30",
+      {
+        "name": "[concat(parameters('nodeVMNamePrefix'), add(variables('index'), 1))]",
+        "type": "Microsoft.Compute/virtualMachines",
+        "location": "[parameters('location')]",
+        "apiVersion": "2016-03-30",
 
-            "dependsOn": [
-                "[concat('Microsoft.Network/networkInterfaces/', variables('nodeVMNicPrefix'), add(variables('index'), 1))]"
-            ],
-            "tags": {
-                "displayName": "nodevm",
-                "provider": "[toUpper(parameters('informaticaTags').provider)]"
-            },
-            "plan": {
+        "dependsOn": [
+          "[concat('Microsoft.Network/networkInterfaces/', variables('nodeVMNicPrefix'), add(variables('index'), 1))]"
+        ],
+        "tags": {
+          "displayName": "nodevm",
+          "provider": "[toUpper(parameters('informaticaTags').provider)]"
+        },
+        /*"plan": {
                 "name": "[variables('osVersion')]",
                 "publisher": "[variables('imagePublisher')]",
                 "product": "[variables('imageOffer')]"
-            },
-            "properties": {
-                "hardwareProfile": {
-                    "vmSize": "[parameters('nodeVMSize')]"
-                },
-                "osProfile": {
-                    "computerName": "[concat(parameters('nodeVMNamePrefix'), add(variables('Index'), 1))]",
-                    "adminUsername": "[parameters('nodeVMAdminUsername')]",
-                    "linuxConfiguration": {
-                        "disablePasswordAuthentication": "true",
-                        "ssh": {
-                            "publicKeys": [
-                                {
-                                    "path": "[variables('sshKeyPath')]",
-                                    "keyData": "[parameters('nodeVMAdminSshPublicKey')]"
-                                }
-                            ]
-                        }
-                    }
-                },
-                "storageProfile": {
+            },*/
+        "plan": {
+          "name": "byol_rhel_7_3_platform_10_1_1",
+          "publisher": "informatica",
+          "product": "platform_10_1_1_multi_node_domain_rhel-7-3_byol-preview"
+        },
+        "properties": {
+          "hardwareProfile": {
+            "vmSize": "[parameters('nodeVMSize')]"
+          },
+          "osProfile": {
+            "computerName": "[concat(parameters('nodeVMNamePrefix'), add(variables('Index'), 1))]",
+            "adminUsername": "[parameters('nodeVMAdminUsername')]",
+            "linuxConfiguration": {
+              "disablePasswordAuthentication": "true",
+              "ssh": {
+                "publicKeys": [
+                  {
+                    "path": "[variables('sshKeyPath')]",
+                    "keyData": "[parameters('nodeVMAdminSshPublicKey')]"
+                  }
+                ]
+              }
+            }
+          },
+          /*"storageProfile": {
                     "imageReference": {
                         "publisher": "[variables('imagePublisher')]",
                         "offer": "[variables('imageOffer')]",
@@ -225,45 +230,59 @@
                             "uri": "[concat('https://', parameters('storageName'), '.blob.core.windows.net/vhds/', parameters('nodeVMNamePrefix'), uniqueString(resourceGroup().id, deployment().name), add(variables('index'), 1), '.osdisk.vhd')]"
                         }
                     }
-                },
-                "networkProfile": {
-                    "networkInterfaces": [
-                        {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('nodeVMNicPrefix'), add(variables('index'), 1)))]"
-                        }
-                    ]
-                }
-            },
-            "resources": [
-                {
-                    "name": "ScriptExtGVM",
-                    "type": "extensions",
-                    "location": "[parameters('location')]",
-                    "apiVersion": "2016-03-30",
-                    "dependsOn": [
-                        "[concat('Microsoft.Compute/virtualMachines/', parameters('nodeVMNamePrefix'), add(variables('index'), 1))]"
-                    ],
-                    "tags": {
-                        "displayName": "informaticaextension",
-                        "provider": "[toUpper(parameters('informaticaTags').provider)]"
-                    },
-                    "properties": {
-                        "publisher": "Microsoft.OSTCExtensions",
-                        "type": "CustomScriptForLinux",
-                        "typeHandlerVersion": "1.5",
-                        "autoUpgradeMinorVersion": true,
-                        "settings": {
-                            "fileUris": [
-                                "[concat(variables('extScriptURI'),  variables('extScriptFile'))]"
-                            ]
-                        },
-                      "protectedSettings": {
-                        "commandToExecute": "[concat('sudo sh ', variables('extScriptFile'), ' ', concat(parameters('nodeVMNamePrefix'), '1'), ' ', parameters('infaDomainName'), ' \"', parameters('infaDomainUser'), '\" \"', parameters('infaDomainPassword'), '\" ', parameters('infaNodeNamePrefix'), add(variables('index'), 1), ' ', variables('infaNodePort'), ' ', variables('dbType'), ' ', variables('dbInstanceName'), ' \"', parameters('dbUser'), '\" \"', parameters('dbPassword'), '\" ', parameters('dbVMName'), ' ', variables('dbPort'), ' \"', parameters('infaKeyword'), '\" ', variables('index'), ' \"', parameters('nodeVMAdminUsername'), '\" \"', parameters('storageName'), '\" ', listKeys(parameters('storageID'), '2016-01-01').keys[0].value, ' \"', parameters('infaDomainLicense'), '\" \"',parameters('mrsdbuser'),'\" \"',parameters('mrsdbpwd'),'\" \"',parameters('refdatadbuser'),'\" \"',parameters('refdatadbpwd'),'\" \"',parameters('profiledbuser'),'\" \"',parameters('profiledbpwd'),'\"')]"
-                      }
-                    }
-                }
+                },*/
+          "storageProfile": {
+            "osDisk": {
+              "osType": "Linux",
+              "name": "InfaOSDisk",
+              "createOption": "FromImage",
+              "image": {
+                "uri": "https://dqstorage.blob.core.windows.net/vhds/dq1011rhelpwd20170405152034.vhd"
+              },
+              "vhd": {
+                "uri": "[concat('https://','dqstorage','.blob.core.windows.net/dataqualitycontainer/', parameters('nodeVMNamePrefix'), add(variables('index'),1), '.osdisklinssh.vhd')]"
+              },
+              "caching": "ReadWrite"
+            }
+          },
+          "networkProfile": {
+            "networkInterfaces": [
+              {
+                "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('nodeVMNicPrefix'), add(variables('index'), 1)))]"
+              }
             ]
-        }
+          }
+        },
+        "resources": [
+          {
+            "name": "ScriptExtGVM",
+            "type": "extensions",
+            "location": "[parameters('location')]",
+            "apiVersion": "2016-03-30",
+            "dependsOn": [
+              "[concat('Microsoft.Compute/virtualMachines/', parameters('nodeVMNamePrefix'), add(variables('index'), 1))]"
+            ],
+            "tags": {
+              "displayName": "informaticaextension",
+              "provider": "[toUpper(parameters('informaticaTags').provider)]"
+            },
+            "properties": {
+              "publisher": "Microsoft.OSTCExtensions",
+              "type": "CustomScriptForLinux",
+              "typeHandlerVersion": "1.5",
+              "autoUpgradeMinorVersion": true,
+              "settings": {
+                "fileUris": [
+                  "[concat(variables('extScriptURI'),  variables('extScriptFile'))]"
+                ]
+              },
+              "protectedSettings": {
+                "commandToExecute": "[concat('sudo sh ', variables('extScriptFile'), ' ', concat(parameters('nodeVMNamePrefix'), '1'), ' ', parameters('infaDomainName'), ' \"', parameters('infaDomainUser'), '\" \"', parameters('infaDomainPassword'), '\" ', parameters('infaNodeNamePrefix'), add(variables('index'), 1), ' ', variables('infaNodePort'), ' ', variables('dbType'), ' ', variables('dbInstanceName'), ' \"', parameters('dbUser'), '\" \"', parameters('dbPassword'), '\" ', parameters('dbVMName'), ' ', variables('dbPort'), ' \"', parameters('infaKeyword'), '\" ', variables('index'), ' \"', parameters('nodeVMAdminUsername'), '\" \"', parameters('storageName'), '\" ', listKeys(parameters('storageID'), '2016-01-01').keys[0].value, ' \"', parameters('infaDomainLicense'), '\" \"',parameters('mrsdbuser'),'\" \"',parameters('mrsdbpwd'),'\" \"',parameters('refdatadbuser'),'\" \"',parameters('refdatadbpwd'),'\" \"',parameters('profiledbuser'),'\" \"',parameters('profiledbpwd'),'\"')]"
+              }
+            }
+          }
+        ]
+      }
     ],
     "outputs": {
         "fqdn": {
