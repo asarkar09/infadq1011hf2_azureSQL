@@ -79,18 +79,22 @@ export PATH
 
 chmod -R 777 $JRE_HOME
 
-function setenv {
-    echo "Setting envrionment variables"
-    INFA_HOME=/home/Informatica/10.1.1
-	ODBCHOME=$INFA_HOME/ODBC7.1
-	ODBCINI=$ODBCHOME/odbc.ini
-	ODBCINST=$ODBCHOME/odbcinst.ini
-	PATH=$PATH:$INFA_HOME/server/bin:$INFA_HOME/services/shared/bin:$INFA_HOME:$ODBCHOME/bin
-    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INFA_HOME/services/shared/bin:$INFA_HOME/server/bin:$PATH:$ODBCHOME/lib
-    export INFA_HOME ODBCHOME ODBCINI ODBCINST PATH LD_LIBRARY_PATH
-}
-setenv
+echo "Setting envrionment variables"
 
+ODBCHOME="/home/Informatica/10.1.1/ODBC7.1"
+export ODBCHOME
+
+ODBCINI="/home/Informatica/10.1.1/ODBC7.1/odbc.ini"
+export ODBCINI
+
+ODBCINST="/home/Informatica/10.1.1/ODBC7.1/odbcinst.ini"
+export ODBCINST
+
+PATH="$PATH":"/home/Informatica/10.1.1/server/bin":"/home/Informatica/10.1.1/services/shared/bin":"/home/Informatica/10.1.1/ODBC7.1/bin"
+export PATH
+
+LD_LIBRARY_PATH="$LD_LIBRARY_PATH":"/home/Informatica/10.1.1/services/shared/bin":"/home/Informatica/10.1.1/server/bin":"/home/Informatica/10.1.1/ODBC7.1/lib"
+export LD_LIBRARY_PATH
 
 cloudsupportenable=1
 if [ "$domainLicenseURL" != "nolicense" -a $joinDomain -eq 0 ]
