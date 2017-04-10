@@ -103,25 +103,25 @@
       "type": "object"
     }
   },
-    "variables": {
-        "index": 0,
-        "nodeVMDNSName": "[toLower(concat(parameters('nodeVMNamePrefix'), add(variables('Index'), 1), uniqueString(resourceGroup().id, deployment().name)))]",
-        "nodeVMNicPrefix": "[concat(parameters('nodeVMNamePrefix'),'Nic')]",
+  "variables": {
+    "index": 0,
+    "nodeVMDNSName": "[toLower(concat(parameters('nodeVMNamePrefix'), add(variables('Index'), 1), uniqueString(resourceGroup().id, deployment().name)))]",
+    "nodeVMNicPrefix": "[concat(parameters('nodeVMNamePrefix'),'Nic')]",
 
-        "extScriptURI": "[parameters('baseUrl')]",
-        "extScriptFile": "lininfainstaller.sh",
+    "extScriptURI": "[parameters('baseUrl')]",
+    "extScriptFile": "lininfainstaller.sh",
 
-        "sshKeyPath": "[concat('/home/',parameters('nodeVMAdminUsername'),'/.ssh/authorized_keys')]",
+    "sshKeyPath": "[concat('/home/',parameters('nodeVMAdminUsername'),'/.ssh/authorized_keys')]",
 
-        "infaNodePort": 6005,
-        "dbType": "MSSQLSERVER",
-        "dbInstanceName": "model",
-        "dbPort": "1433",
+    "infaNodePort": 6005,
+    "dbType": "MSSQLSERVER",
+    "dbInstanceName": "model",
+    "dbPort": "1433",
 
-        "imagePublisher": "informatica",
-        "imageOffer": "platform_10_1_1_multi_node_domain_rhel-7-3_byol",
-        "osVersion": "byol_rhel_7_3_platform_10_1_1"
-    },
+    "imagePublisher": "informatica",
+    "imageOffer": "data_quality_10_1_1_rhel_7_3_byol-preview",
+    "osVersion": "byol_rhel_7_3_data_quality_10_1_1"
+  },
     "resources": [
         {
             "name": "[variables('nodeVMDNSName')]",
@@ -186,16 +186,16 @@
           "displayName": "nodevm",
           "provider": "[toUpper(parameters('informaticaTags').provider)]"
         },
-        /*"plan": {
+        "plan": {
                 "name": "[variables('osVersion')]",
                 "publisher": "[variables('imagePublisher')]",
                 "product": "[variables('imageOffer')]"
-            },*/
-        "plan": {
+        },
+        /*"plan": {
           "name": "byol_rhel_7_3_platform_10_1_1",
           "publisher": "informatica",
           "product": "platform_10_1_1_multi_node_domain_rhel-7-3_byol-preview"
-        },
+        },*/
         "properties": {
           "hardwareProfile": {
             "vmSize": "[parameters('nodeVMSize')]"
@@ -215,7 +215,7 @@
               }
             }
           },
-          /*"storageProfile": {
+          "storageProfile": {
                     "imageReference": {
                         "publisher": "[variables('imagePublisher')]",
                         "offer": "[variables('imageOffer')]",
@@ -230,8 +230,8 @@
                             "uri": "[concat('https://', parameters('storageName'), '.blob.core.windows.net/vhds/', parameters('nodeVMNamePrefix'), uniqueString(resourceGroup().id, deployment().name), add(variables('index'), 1), '.osdisk.vhd')]"
                         }
                     }
-                },*/
-          "storageProfile": {
+          },
+          /*"storageProfile": {
             "osDisk": {
               "osType": "Linux",
               "name": "InfaOSDisk",
@@ -244,7 +244,7 @@
               },
               "caching": "ReadWrite"
             }
-          },
+          },*/
           "networkProfile": {
             "networkInterfaces": [
               {
