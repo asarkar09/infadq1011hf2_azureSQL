@@ -79,23 +79,6 @@ export PATH
 
 chmod -R 777 $JRE_HOME
 
-echo "Setting envrionment variables"
-
-ODBCHOME="/home/Informatica/10.1.1/ODBC7.1"
-export ODBCHOME
-
-ODBCINI="/home/Informatica/10.1.1/ODBC7.1/odbc.ini"
-export ODBCINI
-
-ODBCINST="/home/Informatica/10.1.1/ODBC7.1/odbcinst.ini"
-export ODBCINST
-
-PATH="$PATH":"/home/Informatica/10.1.1/server/bin":"/home/Informatica/10.1.1/services/shared/bin":"/home/Informatica/10.1.1/ODBC7.1/bin"
-export PATH
-
-LD_LIBRARY_PATH="$LD_LIBRARY_PATH":"/home/Informatica/10.1.1/services/shared/bin":"/home/Informatica/10.1.1/server/bin":"/home/Informatica/10.1.1/ODBC7.1/lib"
-export LD_LIBRARY_PATH
-
 cloudsupportenable=1
 if [ "$domainLicenseURL" != "nolicense" -a $joinDomain -eq 0 ]
 then
