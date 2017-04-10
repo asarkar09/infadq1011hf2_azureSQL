@@ -70,10 +70,13 @@ licensekeylocation=\\/opt\\/Informatica\\/license.key
 echo Adding firewall rules for Informatica domain service ports
 iptables -A IN_public_allow -p tcp -m tcp --dport 6005:6008 -m conntrack --ctstate NEW -j ACCEPT
 iptables -A IN_public_allow -p tcp -m tcp --dport 6014:6114 -m conntrack --ctstate NEW -j ACCEPT
+iptables -A IN_public_allow -p tcp -m tcp --dport 8095:9005 -m conntrack --ctstate NEW -j ACCEPT
 iptables -A IN_public_allow -p tcp -m tcp --dport 8085 -m conntrack --ctstate NEW -j ACCEPT
 
-JRE_HOME="$infainstallerloc/source/java/jre"
-export JRE_HOME		
+# Java Home configuration
+echo Setting JRE_HOME
+JRE_HOME="$infainstallionloc/java/jre"
+export JRE_HOME
 PATH="$JRE_HOME/bin":"$PATH"
 export PATH
 
@@ -170,6 +173,14 @@ head -1 $infainstallerloc/unjar_esd.sh_temp > $infainstallerloc/unjar_esd.sh
 echo exit_value_unjar_esd=0 >> $infainstallerloc/unjar_esd.sh
 chmod 777 $infainstallerloc/unjar_esd.sh
 
+# To set the environment variable related to SQL Server
+echo Setting the environment variable related to SQL Server
+export ODBCHOME=/home/Informatica/10.1.1/ODBC7.1
+export ODBCINI=$ODBCHOME/odbc.ini
+export ODBCINST=$ODBCHOME/odbcinst.ini
+export PATH=$PATH:$JRE_HOME/bin:/home/Informatica/10.1.1/server/bin:/home/Informatica/10.1.1/services/shared/bin:/home/Informatica/10.1.1:$ODBCHOME/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/Informatica/10.1.1/services/shared/bin:/home/Informatica/10.1.1/server/bin:$ODBCHOME/lib
+
 echo Installing Informatica domain
 cd $infainstallerloc
 echo Y Y | sh silentinstall.sh 
@@ -182,7 +193,7 @@ mv $infainstallerloc/unjar_esd.sh_temp $infainstallerloc/unjar_esd.sh
 
 
 echo Changing ownership of directories
-chown -R $osUserName $infainstallionlocown
+chown -R $osUserName $infainstallionloc
 chown -R $osUserName $informaticaopt 
 chown -R $osUserName $mountdir
 chown -R $osUserName /home/$osUserName
