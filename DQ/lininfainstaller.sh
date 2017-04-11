@@ -66,8 +66,6 @@ infainstallionloc=\\/home\\/Informatica\\/10.1.1
 defaultkeylocation=$infainstallionloc\\/isp\\/config\\/keys
 licensekeylocation=\\/opt\\/Informatica\\/license.key
 
-infainstallationdir=/home/Informatica/10.1.1
-
 # Firewall configurations
 echo Adding firewall rules for Informatica domain service ports
 iptables -A IN_public_allow -p tcp -m tcp --dport 6005:6008 -m conntrack --ctstate NEW -j ACCEPT
@@ -188,7 +186,6 @@ mv $infainstallerloc/unjar_esd.sh_temp $infainstallerloc/unjar_esd.sh
 
 echo Changing ownership of directories
 chown -R $osUserName $infainstallionlocown
-chown -R $osUserName $infainstallationdir
 chown -R $osUserName $informaticaopt 
 chown -R $osUserName $mountdir
 chown -R $osUserName /home/$osUserName
@@ -260,3 +257,24 @@ then
 fi
 
 echo Informatica setup Complete.
+
+# Restarting domain and setting up ODBC environment
+
+echo Recycling domain
+
+sh /home/Informatica/10.1.1/tomcat/bin/infaservice.sh shutdown
+
+sleep 120
+
+chown -R $osUserName /home/Informatica/
+
+echo Setting the ODBC environment variable
+export ODBCHOME=/home/Informatica/10.1.1/ODBC7.1
+export ODBCINI=$ODBCHOME/odbc.ini
+export ODBCINST=$ODBCHOME/odbcinst.ini
+export PATH=$PATH:$ODBCHOME/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ODBCHOME/lib
+
+echo $ODBCHOME $ODBCINI $ODBCINST $PATH $LD_LIBRARY_PATH
+
+sh /home/Informatica/10.1.1/tomcat/bin/infaservice.sh startup
