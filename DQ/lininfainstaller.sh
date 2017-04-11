@@ -77,7 +77,7 @@ iptables -A IN_public_allow -p tcp -m tcp --dport 8085 -m conntrack --ctstate NE
 
 # Java Home configuration
 echo Setting JRE_HOME
-JRE_HOME="infainstallerloc/source/java/jre"
+JRE_HOME="$infainstallerloc/source/java/jre"
 export JRE_HOME
 PATH="$JRE_HOME/bin":"$PATH"
 export PATH
