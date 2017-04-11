@@ -66,6 +66,8 @@ infainstallionloc=\\/home\\/Informatica\\/10.1.1
 defaultkeylocation=$infainstallionloc\\/isp\\/config\\/keys
 licensekeylocation=\\/opt\\/Informatica\\/license.key
 
+infainstallationdir=/home/Informatica/10.1.1
+
 # Firewall configurations
 echo Adding firewall rules for Informatica domain service ports
 iptables -A IN_public_allow -p tcp -m tcp --dport 6005:6008 -m conntrack --ctstate NEW -j ACCEPT
@@ -75,7 +77,7 @@ iptables -A IN_public_allow -p tcp -m tcp --dport 8085 -m conntrack --ctstate NE
 
 # Java Home configuration
 echo Setting JRE_HOME
-JRE_HOME="$infainstallionloc/java/jre"
+JRE_HOME="infainstallerloc/source/java/jre"
 export JRE_HOME
 PATH="$JRE_HOME/bin":"$PATH"
 export PATH
@@ -173,8 +175,8 @@ head -1 $infainstallerloc/unjar_esd.sh_temp > $infainstallerloc/unjar_esd.sh
 echo exit_value_unjar_esd=0 >> $infainstallerloc/unjar_esd.sh
 chmod 777 $infainstallerloc/unjar_esd.sh
 
-# To set the environment variable related to SQL Server
-echo Setting the environment variable related to SQL Server
+# Setting the ODBC environment variable
+echo Setting the ODBC environment variable
 export ODBCHOME=/home/Informatica/10.1.1/ODBC7.1
 export ODBCINI=$ODBCHOME/odbc.ini
 export ODBCINST=$ODBCHOME/odbcinst.ini
@@ -193,7 +195,8 @@ mv $infainstallerloc/unjar_esd.sh_temp $infainstallerloc/unjar_esd.sh
 
 
 echo Changing ownership of directories
-chown -R $osUserName $infainstallionloc
+chown -R $osUserName $infainstallionlocown
+chown -R $osUserName $infainstallationdir
 chown -R $osUserName $informaticaopt 
 chown -R $osUserName $mountdir
 chown -R $osUserName /home/$osUserName
