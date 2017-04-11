@@ -175,14 +175,6 @@ head -1 $infainstallerloc/unjar_esd.sh_temp > $infainstallerloc/unjar_esd.sh
 echo exit_value_unjar_esd=0 >> $infainstallerloc/unjar_esd.sh
 chmod 777 $infainstallerloc/unjar_esd.sh
 
-# Setting the ODBC environment variable
-echo Setting the ODBC environment variable
-export ODBCHOME=/home/Informatica/10.1.1/ODBC7.1
-export ODBCINI=$ODBCHOME/odbc.ini
-export ODBCINST=$ODBCHOME/odbcinst.ini
-export PATH=$PATH:$JRE_HOME/bin:/home/Informatica/10.1.1/server/bin:/home/Informatica/10.1.1/services/shared/bin:/home/Informatica/10.1.1:$ODBCHOME/bin
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/Informatica/10.1.1/services/shared/bin:/home/Informatica/10.1.1/server/bin:$ODBCHOME/lib
-
 echo Installing Informatica domain
 cd $infainstallerloc
 echo Y Y | sh silentinstall.sh 
