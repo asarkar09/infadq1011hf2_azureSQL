@@ -119,7 +119,7 @@
     "dbPort": "1433",
 
     "imagePublisher": "informatica",
-    "imageOffer": "data_quality_10_1_1_rhel_7_3_byol-preview",
+    "imageOffer": "data_quality_10_1_1_rhel_7_3_byol",
     "osVersion": "byol_rhel_7_3_data_quality_10_1_1"
   },
     "resources": [
@@ -191,11 +191,6 @@
                 "publisher": "[variables('imagePublisher')]",
                 "product": "[variables('imageOffer')]"
         },
-        /*"plan": {
-          "name": "byol_rhel_7_3_platform_10_1_1",
-          "publisher": "informatica",
-          "product": "platform_10_1_1_multi_node_domain_rhel-7-3_byol-preview"
-        },*/
         "properties": {
           "hardwareProfile": {
             "vmSize": "[parameters('nodeVMSize')]"
