@@ -135,18 +135,6 @@
                             ]
                         }
                     },
-                  {
-                    "name": "domainNodeCount",
-                    "type": "Microsoft.Common.TextBox",
-                    "label": "Number of nodes",
-                    "defaultValue": "1",
-                    "toolTip": "Only single node is allowed at present",
-                    "constraints": {
-                      "required": true,
-                      "regex": "^([1-1]{1})$",
-                      "validationMessage": "Should be equal to 1 only"
-                    }
-                  },
                     {
                         "name": "nodeVMPrefix",
                         "type": "Microsoft.Common.TextBox",
@@ -241,7 +229,7 @@
                             "offer": "platform_10_1_1_multi_node_domain_windows_byol-preview",
                             "sku": "byol_windows_platform_10_1_1"
                         },
-                        "count": "[steps('nodeVMConfiguration').domainNodeCount]",
+                        "count": 1,
                         "visible": "[equals(steps('nodeVMConfiguration').nodeVMOS, 'windows')]"
                     },
                     {
@@ -261,7 +249,7 @@
                             "offer": "platform_10_1_1_multi_node_domain_rhel-7-3_byol-preview",
                             "sku": "byol_rhel_7_3_platform_10_1_1"
                         },
-                        "count": "[steps('nodeVMConfiguration').domainNodeCount]",
+                        "count": 1,
                         "visible": "[equals(steps('nodeVMConfiguration').nodeVMOS, 'linux')]"
                     }
                 ]
@@ -551,7 +539,7 @@
                                 },
                                 "constraints": {
                                     "minAddressPrefixSize": "/30",
-                                    "minAddressCount": "[add(steps('nodeVMConfiguration').domainNodeCount, 1)]",
+                                    "minAddressCount": "[add(1, 1)]",
                                     "requireContiguousAddresses": true
                                 }
                             }
@@ -563,7 +551,6 @@
 
       "outputs": {
         "location": "[location()]",
-        "nodeVMCount": "[steps('nodeVMConfiguration').domainNodeCount]",
         "nodeVMNamePrefix": "[steps('nodeVMConfiguration').nodeVMPrefix]",
         "nodeVMAuthType": "[coalesce(steps('nodeVMConfiguration').nodeVMAdminPasswordWin.authenticationType, steps('nodeVMConfiguration').nodeVMAdminPasswordLin.authenticationType)]",
         "nodeVMAdminUsername": "[coalesce(steps('nodeVMConfiguration').nodeVMAdminUsernameWin, steps('nodeVMConfiguration').nodeVMAdminUsernameLin)]",
