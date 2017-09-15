@@ -163,7 +163,7 @@
                         "caching": "ReadWrite",
                         "createOption": "FromImage",
                       "vhd": {
-                        "uri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', parameters('storageName')), '2016-01-01').primaryEndpoints.blob)]"
+                        "uri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', parameters('storageName')), '2016-01-01').primaryEndpoints.blob, 'vhds/', toLower(parameters('dbVMName')), '.osdisk.vhd')]"
                       }
                     }
                 },
