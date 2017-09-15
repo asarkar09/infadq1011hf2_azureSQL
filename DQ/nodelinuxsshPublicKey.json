@@ -1,4 +1,4 @@
-﻿{
+{
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
   "parameters": {
@@ -51,9 +51,6 @@
     "nodeVMNamePrefix": {
       "type": "string",
       "minLength": 1
-    },
-    "nodeVMCount": {
-      "type": "int"
     },
     "infaDomainName": {
       "type": "string",
@@ -119,7 +116,7 @@
     "dbPort": "1433",
 
     "imagePublisher": "informatica",
-    "imageOffer": "data_quality_10_1_1_rhel_7_3_byol",
+    "imageOffer": "data_quality_10_1_1_rhel_7_3_byol-preview",
     "osVersion": "byol_rhel_7_3_data_quality_10_1_1"
   },
     "resources": [
@@ -221,25 +218,11 @@
                         "name": "InfaOSDisk",
                         "caching": "ReadWrite",
                         "createOption": "FromImage",
-                        "vhd": {
-                            "uri": "[concat('https://', parameters('storageName'), '.blob.core.windows.net/vhds/', parameters('nodeVMNamePrefix'), uniqueString(resourceGroup().id, deployment().name), add(variables('index'), 1), '.osdisk.vhd')]"
-                        }
+                      "vhd": {
+                        "uri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', parameters('storageName')), '2016-01-01').primaryEndpoints.blob, 'vhds/', toLower(parameters('nodeVMNamePrefix')), '.osdisk.vhd')]"
+                      }
                     }
           },
-          /*"storageProfile": {
-            "osDisk": {
-              "osType": "Linux",
-              "name": "InfaOSDisk",
-              "createOption": "FromImage",
-              "image": {
-                "uri": "https://dqstorage.blob.core.windows.net/vhds/dq1011rhelpwd20170405152034.vhd"
-              },
-              "vhd": {
-                "uri": "[concat('https://','dqstorage','.blob.core.windows.net/dataqualitycontainer/', parameters('nodeVMNamePrefix'), add(variables('index'),1), '.osdisklinssh.vhd')]"
-              },
-              "caching": "ReadWrite"
-            }
-          },*/
           "networkProfile": {
             "networkInterfaces": [
               {
