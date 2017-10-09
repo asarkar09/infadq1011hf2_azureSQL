@@ -1,4 +1,4 @@
-﻿{
+{
     "handler": "Microsoft.Compute.MultiVm",
     "version": "0.1.2-preview",
     "parameters": {
@@ -17,9 +17,9 @@
                     {
                         "name": "infaVersion",
                         "type": "Microsoft.Common.DropDown",
-                        "label": "Informatica PowerCenter version",
+                        "label": "Informatica Data Quality version",
                         "defaultValue": "10.1.1",
-                        "toolTip": "Informatica PowerCenter product version",
+                        "toolTip": "Informatica Data Quality product version",
                         "constraints": {
                             "allowedValues": [
                                 {
@@ -226,8 +226,8 @@
                         "osPlatform": "Windows",
                         "imageReference": {
                             "publisher": "informatica",
-                            "offer": "platform_10_1_1_multi_node_domain_windows_byol-preview",
-                            "sku": "byol_windows_platform_10_1_1"
+                        "offer": "dataquality_10_1_1_windows_byol",
+                        "sku": "byol_windows_dataquality_10_1_1"
                         },
                         "count": 1,
                         "visible": "[equals(steps('nodeVMConfiguration').nodeVMOS, 'windows')]"
@@ -246,8 +246,8 @@
                         "osPlatform": "Linux",
                         "imageReference": {
                             "publisher": "informatica",
-                            "offer": "platform_10_1_1_multi_node_domain_rhel-7-3_byol-preview",
-                            "sku": "byol_rhel_7_3_platform_10_1_1"
+                        "offer": "data_quality_10_1_1_rhel_7_3_byol",
+                        "sku": "byol_rhel_7_3_data_quality_10_1_1"
                         },
                         "count": 1,
                         "visible": "[equals(steps('nodeVMConfiguration').nodeVMOS, 'linux')]"
