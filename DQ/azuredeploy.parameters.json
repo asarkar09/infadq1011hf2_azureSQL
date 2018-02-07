@@ -1,6 +1,117 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-    }
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "southeastasia"
+    },
+    "existingStorageRG": {
+      "value": " "
+    },
+    "existingVnetRG": {
+      "value": " "
+    },
+    "vnetAddressPrefix": {
+      "value": "10.0.0.0/16"
+    },
+    "subnetPrefix": {
+      "value": "10.0.0.0/24"
+    },
+    "dbVMAdminUsername": {
+      "value": "azureuser"
+    },
+    "dbVMAdminPassword": {
+      "value": "Administrator!1"
+    },
+    "dbPassword": {
+      "value": "Administrator!1"
+    },
+    "nodeVMOS": {
+      "value": "windows"
+    },
+    "nodeVMAdminPassword": {
+      "value": "Administrator!1"
+    },
+    "nodeVMAdminSshPublicKey": {
+      "value": ""
+    },
+    "infaKeyword": {
+      "value": "Administrator!1"
+    },
+    "dbVMName": {
+      "value": "DRHVM"
+    },
+    "infaDomainLicense": {
+      "value": "nolicense"
+    },
+    "storageName": {
+      "value": "infadq10"
+    },
+    "nodeVMNamePrefix": {
+      "value": "RHVM"
+    },
+    "baseUrl": {
+      "value": "https://raw.githubusercontent.com/asarkar09/dq1011hf2/master/DQ"
+    },
+      "storageExistingOrNew": {
+          "value": "new"
+      },
+      "vnetExistingOrNew": {
+          "value": "new"
+      },
+      "vnetName": {
+          "value": "dqvnet"
+      },
+      "subnetName": {
+          "value": "dqsubnet"
+      },
+      "dbType": {
+          "value": "sqlserver"
+      },
+      "dbVMSize": {
+          "value": "Standard_DS11"
+      },
+      "dbUser": {
+          "value": "azure-user"
+      },
+      "nodeVMSize": {
+          "value": "Standard_DS11"
+      },
+      "nodeVMAuthType": {
+          "value": "password"
+      },
+      "nodeVMAdminUsername": {
+          "value": "azureuser"
+      },
+      "infaVersion": {
+          "value": "10.1.1"
+      },
+      "infaDomainName": {
+          "value": "azure-domain"
+      },
+      "infaDomainUser": {
+          "value": "Administrator"
+      },
+      "infaDomainPassword": {
+          "value": "Administrator!1"
+      },
+      "mrsdbuser": {
+          "value": "m-rs"
+      },
+      "mrsdbpwd": {
+          "value": "Administrator!1"
+      },
+      "refdatadbuser": {
+          "value": "cms-"
+      },
+      "refdatadbpwd": {
+          "value": "Administrator!1"
+      },
+      "profiledbuser": {
+          "value": "pro_file"
+      },
+      "profiledbpwd": {
+          "value": "Administrator!1"
+      }
+  }
 }
