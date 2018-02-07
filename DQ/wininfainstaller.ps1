@@ -43,7 +43,7 @@ netsh  advfirewall firewall add rule name="Informatica_AnalystService" dir=in ac
 $shareName = "infaaeshare"
 
 $infaHome = $env:SystemDrive + "\Informatica\10.1.1"
-$installerHome = $env:SystemDrive + "\Informatica\Archive\1011_Server_Installer_winem-64t"
+$installerHome = $env:SystemDrive + "\Informatica\Archive\informatica_1011HF2_server_winem-64t"
 $utilityHome = $env:SystemDrive + "\Informatica\Archive\utilities"
 
 #Setting Java in path
