@@ -278,8 +278,12 @@
                       "allowedValues": [
                         {
                           "label": "SQL Server 2014",
-                          "value": "sqlserver"
-                        }
+                          "value": "sqlserver2014"
+                        },
+                                        {
+                                            "label": "SQL Server 2016",
+                                            "value": "sqlserver2016"
+                                        }
                       ]
                     },
                     "visible": true
@@ -333,9 +337,9 @@
                     ],
                     "osPlatform": "Windows",
                     "imageReference": {
-                      "publisher": "informatica",
-                      "offer": "sqlserver-2014-image",
-                      "sku": "sqlserver-2014-image-for-pc-bdm"
+                      "publisher": "MicrosoftSQLServer",
+                      "offer": "SQL2014SP2-WS2012R2",
+                      "sku": "Enterprise"
                     },
                     "count": 1
                   }
