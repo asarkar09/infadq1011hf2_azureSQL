@@ -1,4 +1,4 @@
-﻿{
+{
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
@@ -40,10 +40,14 @@
             }
         }
     ],
-    "outputs": {
-        "storageId": {
-            "value": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageName'))]",
-            "type": "string"
-        }
+  "outputs": {
+    "storageId": {
+      "value": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageName'))]",
+      "type": "string"
+    },
+    "storageRef": {
+      "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', parameters('storageName')), '2016-01-01').primaryEndpoints.blob]",
+      "type": "string"
     }
+  }
 }
