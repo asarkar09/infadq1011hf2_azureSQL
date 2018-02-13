@@ -1,4 +1,4 @@
-﻿{
+{
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
   "parameters": {
@@ -81,10 +81,11 @@
     "dbType": {
       "type": "string",
       "allowedValues": [
-        "sqlserver"
+        "sqlserver2014",
+        "sqlserver2016"
       ],
       "metadata": {
-        "description": "Database type. Only SQL Server 2014 on VM is supported for now"
+        "description": "Database type. Only SQL Server 2014 and 2016 on VM is supported for now"
       }
     },
     "dbVMName": {
@@ -253,39 +254,46 @@
       }
     }
   },
-    "variables": {
-        "baseUri": "[concat(parameters('baseUrl'), '/')]",
+  "variables": {
+    "baseUri": "[concat(parameters('baseUrl'), '/')]",
 
-        "storageUri": "[concat(variables('baseuri'), 'storage', parameters('storageExistingOrNew'),'.json')]",
-        "vnetUri": "[concat(variables('baseuri'), 'vnet', parameters('vnetExistingOrNew'),'.json')]",
-        "nsgUri": "[concat(variables('baseuri'), 'networksecuritygroup.json')]",
-        "dbUri": "[concat(variables('baseuri'), parameters('dbType'),'.json')]",
+    "storageUri": "[concat(variables('baseuri'), 'storage', parameters('storageExistingOrNew'),'.json')]",
+    "vnetUri": "[concat(variables('baseuri'), 'vnet', parameters('vnetExistingOrNew'),'.json')]",
+    "nsgUri": "[concat(variables('baseuri'), 'networksecuritygroup.json')]",
+    "dbUri": "[concat(variables('baseuri'), parameters('dbType'),'.json')]",
 
-        "nodeUriList": [
-            "node",
-            "node",
-            "nodemulti"
-        ],
+    "nodeUriList": [
+      "node",
+      "node",
+      "nodemulti"
+    ],
 
-        "nodeVMUri": "[concat(variables('baseuri'), 'node', parameters('nodeVMOS'), parameters('nodeVMAuthType'), '.json')]",
+    "nodeVMUri": "[concat(variables('baseuri'), 'node', parameters('nodeVMOS'), parameters('nodeVMAuthType'), '.json')]",
 
-        "infaNodeNamePrefix": "node",
+    "infaNodeNamePrefix": "node",
 
-        "vnetIDs": {
-            "existing": "[resourceId(parameters('existingVnetRG'), 'Microsoft.Network/virtualNetworks', parameters('vnetName'))]",
-            "new": "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
-        },
-        "vnetID": "[variables('vnetIDs')[parameters('vnetExistingOrNew')]]",
-        "subnetID": "[concat(variables('vnetID'), '/subnets/', parameters('subnetName'))]",
-
-        "storageIDs": {
-            "existing": "[resourceId(parameters('existingStorageRG'), 'Microsoft.Storage/storageAccounts', parameters('storageName'))]",
-            "new": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageName'))]"
-        },
-        "storageID": "[variables('storageIDs')[parameters('storageExistingOrNew')]]",
-
-        "nsgName": "NetworkSecurityGroup"
+    "vnetIDs": {
+      "existing": "[resourceId(parameters('existingVnetRG'), 'Microsoft.Network/virtualNetworks', parameters('vnetName'))]",
+      "new": "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
     },
+    "vnetID": "[variables('vnetIDs')[parameters('vnetExistingOrNew')]]",
+    "subnetID": "[concat(variables('vnetID'), '/subnets/', parameters('subnetName'))]",
+
+    "storageIDs": {
+      "existing": "[resourceId(parameters('existingStorageRG'), 'Microsoft.Storage/storageAccounts', parameters('storageName'))]",
+      "new": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageName'))]"
+    },
+    "storageID": "[variables('storageIDs')[parameters('storageExistingOrNew')]]",
+
+    "nsgName": "NetworkSecurityGroup",
+
+    "dbTypes": {
+      "sqlserver2014": "MSSQLServer",
+      "sqlserver2016": "MSSQLServer"
+      
+    },
+    "dbType": "[variables('dbTypes')[parameters('dbType')]]"
+  },
     "resources": [
         {
             "name": "storageSetup",
@@ -396,6 +404,15 @@
                 "storageName": {
                   "value": "[parameters('storageName')]"
                 },
+                "storageID": {
+                  "value": "[variables('storageID')]"
+                },
+                "storageRef": {
+                  "value": "[reference('storageSetup').outputs.storageRef.value]"
+                },
+                "dbType": {
+                  "value": "[parameters('dbType')]"
+                },
                 "dbVMName": {
                   "value": "[parameters('dbVMName')]"
                 },
@@ -476,6 +493,9 @@
                 "storageID": {
                   "value": "[variables('storageID')]"
                 },
+                "storageRef": {
+                  "value": "[reference('storageSetup').outputs.storageRef.value]"
+                },
                 "vnetName": {
                   "value": "[parameters('vnetName')]"
                 },
@@ -490,6 +510,9 @@
                 },
                 "dbVMName": {
                   "value": "[parameters('dbVMName')]"
+                },
+                "dbType": {
+                  "value": "[variables('dbType')]"
                 },
                 "dbUser": {
                   "value": "[parameters('dbUser')]"
