@@ -1,4 +1,4 @@
-﻿{
+{
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
@@ -95,8 +95,8 @@
                     "priority": 111,
                     "direction": "Inbound"
                   }
-                },
-                {
+                }
+           /*     {
                   "name": "MSSQL",
                   "properties": {
                     "description": "Enabling port for MS SQL",
@@ -109,7 +109,7 @@
                     "priority": 131,
                     "direction": "Inbound"
                   }
-                }
+                } */
               ]
             }
         }
