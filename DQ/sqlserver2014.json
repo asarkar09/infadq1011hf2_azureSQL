@@ -17,6 +17,9 @@
     "dbType": {
       "type": "string"
     },
+    "dbName": {
+            "type": "string"
+        },
     "dbVMName": {
       "type": "string"
     },
