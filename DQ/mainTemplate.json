@@ -206,9 +206,15 @@
     },
     "infaDomainLicense": {
       "type": "string",
-      "defaultValue": "nolicense",  
+      "defaultValue": "nolicense",
       "metadata": {
         "description": "Informatica domain license key file url"
+      }
+    },
+    "dbName": {
+      "type": "string",
+      "metadata": {
+        "description": "Database service name"
       }
     },
     "baseUrl": {
@@ -464,6 +470,9 @@
                 "profiledbpwd": {
                   "value": "[parameters('profiledbpwd')]"
                 },
+                "dbName": {
+                  "value": "[parameters('dbName')]"
+                },
                 "informaticaTags": {
                   "value": "[parameters('informaticaTags')]"
                 }
@@ -519,6 +528,9 @@
                 },
                 "dbPassword": {
                   "value": "[parameters('dbPassword')]"
+                },
+                "dbName": {
+                  "value": "[parameters('dbName')]"
                 },
                 "nodeVMSize": {
                   "value": "[parameters('nodeVMSize')]"
